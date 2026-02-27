@@ -8,6 +8,20 @@ GENDER = (
 )
 
 
+class Supplier(models.Model):
+    company_name = models.CharField(max_length=50)
+    contact_name = models.CharField(max_length=50)
+    contact_title = models.CharField(max_length=50)
+    address = models.CharField(max_length=100)
+    city = models.CharField(max_length=50)
+    region = models.CharField(max_length=100)
+    postal_code = models.CharField(max_length=50)
+    country = models.CharField(max_length=100)
+    phone = models.CharField(max_length=50)
+    email = models.CharField(max_length=50)
+    webpage = models.CharField(max_length=50)
+
+
 class Product(models.Model):
     product_name = models.CharField(max_length=50)
     supplier = models.ForeignKey(Supplier, on_delete=models.DO_NOTHING, null=True)
