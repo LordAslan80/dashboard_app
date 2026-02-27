@@ -61,3 +61,4 @@ class Order(models.Model):
     shipped_postal_code = models.CharField(max_length=100)
     shipped_country = models.CharField(max_length=100)
     customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
+    product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
