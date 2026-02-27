@@ -1,6 +1,29 @@
 from django.db import models
 
 
+GENDER = (
+    ("Masculine", "Masculine"),
+    ("Feminine", "Feminine"),
+    ("Prefer not to say", "Prefer not to say"),
+)
+
+
+class Customer(models.Model):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    gender = models.CharField(
+        max_length=50, choices=GENDER, default="Prefer not to say"
+    )
+    title = models.CharField(max_length=50)
+    address = models.CharField(max_length=50)
+    city = models.CharField(max_length=50)
+    region = models.CharField(max_length=50)
+    postal_code = models.CharField(max_length=50)
+    country = models.CharField(max_length=50)
+    phone = models.CharField(max_length=50)
+    email = models.CharField(max_length=50)
+
+
 class Order(models.Model):
     order_date = models.DateTimeField()
     required_date = models.DateTimeField()
