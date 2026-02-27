@@ -8,6 +8,11 @@ GENDER = (
 )
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=100)
+
+
 class Supplier(models.Model):
     company_name = models.CharField(max_length=50)
     contact_name = models.CharField(max_length=50)
