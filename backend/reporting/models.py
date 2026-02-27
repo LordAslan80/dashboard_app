@@ -8,6 +8,15 @@ GENDER = (
 )
 
 
+class Product(models.Model):
+    product_name = models.CharField(max_length=50)
+    supplier = models.ForeignKey(Supplier, on_delete=models.DO_NOTHING, null=True)
+    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
+    unit_price = models.IntegerField()
+    units_in_stock = models.IntegerField()
+    units_on_order = models.IntegerField()
+
+
 class Customer(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
