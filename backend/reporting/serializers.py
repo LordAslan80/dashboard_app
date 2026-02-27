@@ -7,6 +7,10 @@ class OrderSerializer(ModelSerializer):
         model = Order
         fields = "__all__"
 
+    def to_representation(self, instance):
+        self.fields["customer"] = CustomerSerializer(read_only=True)
+        return super(OrderSerializer, self).to_representation(instance)
+
 
 class CustomerSerializer(ModelSerializer):
     class Meta:
