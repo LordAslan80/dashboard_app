@@ -4,8 +4,9 @@ from .serializers import (
     CategorySerializer,
     CustomerSerializer,
     SupplierSerializer,
+    ProductSerializer,
 )
-from .models import Order, Category, Customer, Supplier
+from .models import Order, Category, Customer, Supplier, Product
 
 
 class OrderViewSet(ModelViewSet):
@@ -32,3 +33,10 @@ class SupplierViewSet(ModelViewSet):
 
     def get_queryset(self):
         return Supplier.objects.all().order_by("country", "company_name")
+
+
+class ProductViewSet(ModelViewSet):
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        return Product.objects.all().order_by("category__name", "unit_price")
