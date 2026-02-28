@@ -9,7 +9,7 @@ class OrderSerializer(ModelSerializer):
 
     def to_representation(self, instance):
         self.fields["customer"] = CustomerSerializer(read_only=True)
-        self.fields["product"] = CustomerSerializer(read_only=True)
+        self.fields["product"] = ProductSerializer(read_only=True)
         return super(OrderSerializer, self).to_representation(instance)
 
 
