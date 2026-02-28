@@ -7,4 +7,4 @@ class OrderViewSet(ModelViewSet):
     serializer_class = OrderSerializer
 
     def get_queryset(self):
-        return Order.objects.all().order_by("-created_time")
+        return Order.objects.all().order_by("-order_date")
