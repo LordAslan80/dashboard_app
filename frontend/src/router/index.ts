@@ -15,17 +15,20 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/orders',
         name: 'orders',
-        component: OrdersView
+        component: OrdersView,
+        meta: { screen: 'orders' }
       },
       {
         path: '/products',
         name: 'products',
-        component: ProductsView
+        component: ProductsView,
+        meta: { screen: 'products' }
       },
       {
         path: '/suppliers',
         name: 'suppliers',
-        component: SuppliersView
+        component: SuppliersView,
+        meta: { screen: 'suppliers' }
       },
       {
         path: '/customers',
