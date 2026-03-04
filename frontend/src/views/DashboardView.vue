@@ -8,22 +8,22 @@
             <nav>
                 <section class="nav-section">
                     <div class="section-title">DASHBOARDS</div>
-                    <section>
-                        <a href="#">
+                    <section :class="{'is-toggled': toggledViews.includes('reporting')}">
+                        <a href="#" @click.prevent="toggleViews('reporting')">
                             <span>Reporting</span>
                         </a>
                         <div class="subs">
-                            <router-link :to="{name: 'orders'}">Orders</router-link>
-                            <router-link :to="{name: 'products'}">Products</router-link>
-                            <router-link :to="{name: 'suppliers'}">Suppliers</router-link>
+                            <router-link :to="{name: 'orders'}" class="each">Orders</router-link>
+                            <router-link :to="{name: 'products'}" class="each">Products</router-link>
+                            <router-link :to="{name: 'suppliers'}" class="each">Suppliers</router-link>
                         </div>
                     </section>
-                    <section>
-                        <a href="#">
+                    <section :class="{'is-toggled': toggledViews.includes('relations')}">
+                        <a href="#" @click.prevent="toggleViews('relations')">
                             <span>Relations</span>
                         </a>
                         <div class="subs">
-                            <router-link :to="{name: 'customers'}">Customers</router-link>
+                            <router-link :to="{name: 'customers'}" class="each">Customers</router-link>
                         </div>
                     </section>
                 </section>
@@ -38,15 +38,28 @@
 
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import router from '@/router';
 
 export default defineComponent ({
     setup() {
         const route = useRoute()
+        const toggledViews = ref(
+            [router.currentRoute.value.meta.screen].filter(Boolean)
+        )
+        const toggleViews = (key: string) => {
+            if (toggledViews.value[0] === key) {
+                toggledViews.value = ['']
+            } else {
+                toggledViews.value = [key]
+            }
+        }
 
         return {
-            route
+            route,
+            toggledViews,
+            toggleViews
         }
     },
 })
