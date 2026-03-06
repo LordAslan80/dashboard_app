@@ -61,6 +61,12 @@
                         border-radius: 7px;
                         transition: background-color .2s ease-out;
 
+                        > .nav_icon {
+                            height: 25px;
+                            padding-right: 25px;
+                            color: $color-white;
+                        }
+
                         > span {
                             min-width: 140px;
                             font-size: 18px;
