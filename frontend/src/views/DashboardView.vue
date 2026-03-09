@@ -1,8 +1,8 @@
 <template>
     <div class="default-layout">
         <aside>
-            <header class="logo">
-                <img :style="{height: '40%', width:'30%'}" src="@/assets/logo.png">
+            <header>
+                <img class="logo" src="@/assets/logo.png">
                 <h2>Reports</h2>
             </header>
             <nav>
