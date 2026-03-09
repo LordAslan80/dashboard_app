@@ -1,10 +1,10 @@
 <template>
     <header>
         <span class="title">Reporting / Orders</span>
-        <button class="button is-primary">New order</button>
+        <button class="button is-primary is-on-header">New order</button>
     </header>
 
-    <div class="body">
+    <div>
         <table>
             <thead>
                 <tr>

@@ -1,0 +1,29 @@
+.button {
+    padding: 16px 24px;
+    font-size: 20px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    color: inherit;
+    line-height: 1;
+    border-radius: 30px;
+
+    &:hover {
+        cursor: pointer;
+        background-color: $color-brand-action-1;
+        border-color: $color-brand-action-1;
+    }
+
+    &.is-primary {
+        background-color: $color-primary;
+        color: $color-white;
+        border-radius: 5px;
+
+        &:hover {
+            opacity: .9;
+        }
+    }
+
+    &.is-on-header {
+        margin-right: .8rem;
+    }
+}
