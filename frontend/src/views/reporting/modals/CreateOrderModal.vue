@@ -1,5 +1,5 @@
-<template @close="closeModal">
-    <modal>
+<template>
+    <modal @close="closeModal">
         <div class="modal-content">
             <div class="header">
                 <div class="content">
@@ -94,8 +94,8 @@
     
             <div class="footer">
                 <div class="content">
-                    <button @click="closeModal()">CANCEL</button>
-                    <button @click="addNewRecord()">CONFIRM</button>
+                    <button class="cancel" @click="closeModal()">CANCEL</button>
+                    <button class="confirm" @click="addNewRecord()">CONFIRM</button>
                 </div>
             </div>
         </div>
@@ -117,14 +117,15 @@ export default defineComponent ({
 
     setup(_, context) {
         const buttonEnable = ref(false)
-        const productId = ref(false)
-        const customerId = ref(false)
-        const requiredDate = ref(false)
-        const shippedName = ref(false)
-        const shippedAddress = ref(false)
-        const shippedCity = ref(false)
-        const shippedCountry = ref(false)
-        const shippedPostalCode = ref(false)
+        
+        const productId = ref('')
+        const customerId = ref('')
+        const requiredDate = ref('')
+        const shippedName = ref('')
+        const shippedAddress = ref('')
+        const shippedCity = ref('')
+        const shippedCountry = ref('')
+        const shippedPostalCode = ref('')
 
         const addNewRecord = () => {
             closeModal()
