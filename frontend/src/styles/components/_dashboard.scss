@@ -22,6 +22,11 @@
                 font-size: x-large;
                 text-transform: uppercase;
             }
+
+            .logo {
+                height: 40px;
+                width: 40px;
+            }
         }
 
         > nav {
@@ -106,7 +111,7 @@
 
                             &:hover {
                                 opacity: 1;
-                                background-color: $color-1;
+                                background-color: $color-3;
                             }
 
                             &.router-link-exact-active {
@@ -115,7 +120,7 @@
                             }
 
                             &.each {
-                                margin-left: 3rem;
+                                margin: .1rem 3rem;
                                 color: $color-white;
                             }
                         }
@@ -146,6 +151,8 @@
     }
 
     > .body {
+        border: $color-brand-2 solid 1px;
+
         > header {
             @include flex-h;
             align-items: center;
