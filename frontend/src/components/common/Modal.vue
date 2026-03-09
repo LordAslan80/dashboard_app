@@ -1,7 +1,7 @@
 <template>
     <div class="modal" @keyup.esc="$emit('close')">
         <div class="modal-background" @click="$emit('close')"></div>
-        <slot class="modal-body"></slot>
+        <slot></slot>
     </div>
 </template>
 
