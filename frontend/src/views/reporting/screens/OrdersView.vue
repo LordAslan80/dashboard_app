@@ -34,7 +34,12 @@
                     <td>{{ item.shipped_postal_code }}</td>
                     <td>{{ item.shipped_country }}</td>
                     <td>
-                        <p>placeholder</p>
+                        <span>
+                            <Edit_Icon class="table_icon"/>
+                        </span>
+                        <span>
+                            <Trash_Icon class="table_icon__left"/>
+                        </span>
                     </td>
                 </tr>
             </tbody>
@@ -46,8 +51,15 @@
 <script lang="ts">
 import { loadOrders } from '@/api/reporting';
 import { defineComponent, onMounted, ref } from 'vue';
+import Edit_Icon from '@/assets/icons/Edit_Icon.vue';
+import Trash_Icon from '@/assets/icons/Trash_Icon.vue';
 
 export default defineComponent ({
+    components: {
+        Edit_Icon,
+        Trash_Icon
+    },
+
     setup() {
         const orders = ref()
         const getOrders = async () => {
