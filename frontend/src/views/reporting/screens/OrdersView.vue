@@ -1,8 +1,13 @@
 <template>
     <header>
         <span class="title">Reporting / Orders</span>
-        <button class="button is-primary is-on-header">New order</button>
+        <button class="button is-primary is-on-header" @click="openCreateModal">
+            <Plus_Icon class="nav_icon"/>
+            New order
+        </button>
     </header>
+
+    <create-order-modal v-if="isCreateModalVisible" @close-modal="closeModal"/>
 
     <div>
         <table>
@@ -51,17 +56,31 @@
 <script lang="ts">
 import { loadOrders } from '@/api/reporting';
 import { defineComponent, onMounted, ref } from 'vue';
+import CreateOrderModal from '../modals/CreateOrderModal.vue';
 import Edit_Icon from '@/assets/icons/Edit_Icon.vue';
 import Trash_Icon from '@/assets/icons/Trash_Icon.vue';
+import Plus_Icon from '@/assets/icons/Plus_Icon.vue';
 
 export default defineComponent ({
     components: {
+        CreateOrderModal,
         Edit_Icon,
-        Trash_Icon
+        Trash_Icon,
+        Plus_Icon
     },
 
     setup() {
         const orders = ref()
+        const isCreateModalVisible = ref(false)
+
+        const openCreateModal = () => {
+            isCreateModalVisible.value = true
+        }
+
+        const closeModal = () => {
+            isCreateModalVisible.value = false
+        }
+
         const getOrders = async () => {
             orders.value = await loadOrders()
         }
@@ -71,7 +90,10 @@ export default defineComponent ({
         })
 
         return {
-            orders
+            orders,
+            isCreateModalVisible,
+            openCreateModal,
+            closeModal
         }
     }
 })
