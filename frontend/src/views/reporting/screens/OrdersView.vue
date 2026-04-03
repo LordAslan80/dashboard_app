@@ -55,7 +55,7 @@
 
 <script lang="ts">
 import formatDate from '@/composables/util';
-import { loadOrders } from '@/api/reporting';
+import { loadOrders } from '@/api/reporting/orders';
 import { defineComponent, onMounted, ref } from 'vue';
 import CreateOrderModal from '../modals/CreateOrderModal.vue';
 import Edit_Icon from '@/assets/icons/Edit_Icon.vue';

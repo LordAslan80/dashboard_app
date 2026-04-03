@@ -48,7 +48,7 @@
 
 
 <script lang="ts">
-import { loadProducts } from '@/api/reporting';
+import { loadProducts } from '@/api/reporting/products';
 import { defineComponent, onMounted, ref } from 'vue';
 import Edit_Icon from '@/assets/icons/Edit_Icon.vue';
 import Trash_Icon from '@/assets/icons/Trash_Icon.vue';
