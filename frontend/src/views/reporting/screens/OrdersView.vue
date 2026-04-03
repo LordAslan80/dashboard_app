@@ -29,10 +29,10 @@
             <tbody>
                 <tr v-for="(item, index) in orders" :key="index">
                     <td>{{ item.id }}</td>
-                    <td>{{ item.order_date }}</td>
+                    <td>{{ formatDate(item.order_date) }}</td>
                     <td>{{ item.customer.first_name }} {{ item.customer.last_name }}</td>
                     <td>{{ item.product.product_name }}</td>
-                    <td>{{ item.required_date }}</td>
+                    <td>{{ formatDate(item.required_date) }}</td>
                     <td>{{ item.shipped_name }}</td>
                     <td>{{ item.shipped_address }}</td>
                     <td>{{ item.shipped_city }}</td>
@@ -54,6 +54,7 @@
 
 
 <script lang="ts">
+import formatDate from '@/composables/util';
 import { loadOrders } from '@/api/reporting';
 import { defineComponent, onMounted, ref } from 'vue';
 import CreateOrderModal from '../modals/CreateOrderModal.vue';
@@ -93,7 +94,8 @@ export default defineComponent ({
             orders,
             isCreateModalVisible,
             openCreateModal,
-            closeModal
+            closeModal,
+            formatDate
         }
     }
 })
