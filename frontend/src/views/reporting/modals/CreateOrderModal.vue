@@ -16,8 +16,11 @@
                     </small>
                 </strong>
             </label>
-            <select>
+            <select v-model="productId">
                 <option value="" disabled selected>Select product</option>
+                <option v-for="product in products" :key="product.id" :value="product.id">
+                    {{ product.product_name }}
+                </option>
             </select>
     
             <label>
@@ -28,8 +31,11 @@
                     </small>
                 </strong>
             </label>
-            <select>
+            <select v-model="customerId">
                 <option value="" disabled selected>Select customer</option>
+                <option v-for="customer in customers" :key="customer.id" :value="customer.id">
+                    {{ customer.title }} - {{ customer.first_name }} {{ customer.last_name }}
+                </option>
             </select>
     
             <label>
@@ -103,9 +109,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, onBeforeMount, ref } from 'vue';
 import Modal from '@/components/common/Modal.vue';
 import Close_Icon from '@/assets/icons/Close_Icon.vue';
+import { loadCustomers } from '@/api/relations/customers';
+import { loadProducts } from '@/api/reporting/products';
 
 export default defineComponent ({
     components: {
@@ -127,6 +135,17 @@ export default defineComponent ({
         const shippedCountry = ref('')
         const shippedPostalCode = ref('')
 
+        const customers = ref()
+        const products = ref()
+
+        const getCustomers = async () => {
+            customers.value = await loadCustomers()
+        }
+
+        const getProducts = async () => {
+            products.value = await loadProducts()
+        }
+
         const addNewRecord = () => {
             closeModal()
         }
@@ -134,6 +153,11 @@ export default defineComponent ({
         const closeModal = () => {
             context.emit('close-modal')
         }
+
+        onBeforeMount(() => {
+            getCustomers()
+            getProducts()
+        })
 
         return {
             productId,
@@ -145,7 +169,9 @@ export default defineComponent ({
             shippedCountry,
             shippedPostalCode,
             closeModal,
-            addNewRecord
+            addNewRecord,
+            customers,
+            products
         }
     }
 })
