@@ -3,7 +3,7 @@ import { IProduct } from "./IProduct"
 
 export interface IOrder {
     orderDate: Date
-    requiredDate: Date
+    requiredDate: string
     shippedName: string
     shippedCity: string
     shippedAddress: string
@@ -11,4 +11,7 @@ export interface IOrder {
     shippedCountry: string
     customer: ICustomer
     product: IProduct
+
+    customerId: string
+    productId: string
 }

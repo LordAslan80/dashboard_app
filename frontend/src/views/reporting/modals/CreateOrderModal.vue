@@ -46,7 +46,7 @@
                     </small>
                 </strong>
             </label>
-            <input type="date">
+            <input type="date" v-model="requiredDate">
     
             <label>
                 <strong>
@@ -114,6 +114,8 @@ import Modal from '@/components/common/Modal.vue';
 import Close_Icon from '@/assets/icons/Close_Icon.vue';
 import { loadCustomers } from '@/api/relations/customers';
 import { loadProducts } from '@/api/reporting/products';
+import { IOrder } from '@/models/IOrder';
+import { addNewOrder } from '@/api/reporting/orders';
 
 export default defineComponent ({
     components: {
@@ -147,7 +149,19 @@ export default defineComponent ({
         }
 
         const addNewRecord = () => {
-            closeModal()
+            let newOrderRecord: Partial<IOrder> = {}
+                newOrderRecord.customerId = customerId.value
+                newOrderRecord.productId = productId.value
+                newOrderRecord.requiredDate = requiredDate.value
+                newOrderRecord.shippedName = shippedName.value
+                newOrderRecord.shippedAddress = shippedAddress.value
+                newOrderRecord.shippedCity = shippedCity.value
+                newOrderRecord.shippedCountry = shippedCountry.value
+                newOrderRecord.shippedPostalCode = shippedPostalCode.value
+
+                addNewOrder(newOrderRecord).then(() => {
+                    closeModal()
+                })
         }
 
         const closeModal = () => {
