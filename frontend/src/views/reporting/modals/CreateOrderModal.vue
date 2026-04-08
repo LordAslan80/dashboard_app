@@ -123,7 +123,7 @@ export default defineComponent ({
         Close_Icon
     },
 
-    emits: ['close-modal'],
+    emits: ['close-modal', 'update-list'],
 
     setup(_, context) {
         const buttonEnable = ref(false)
@@ -160,12 +160,17 @@ export default defineComponent ({
                 newOrderRecord.shippedPostalCode = shippedPostalCode.value
 
                 addNewOrder(newOrderRecord).then(() => {
+                    updateList()
                     closeModal()
                 })
         }
 
         const closeModal = () => {
             context.emit('close-modal')
+        }
+        
+        const updateList = () => {
+            context.emit('update-list')
         }
 
         onBeforeMount(() => {
