@@ -101,7 +101,7 @@
             <div class="footer">
                 <div class="content">
                     <button class="cancel" @click="closeModal()">CANCEL</button>
-                    <button class="confirm" @click="addNewRecord()">CONFIRM</button>
+                    <button :disabled="!buttonEnable" class="confirm" @click="addNewRecord()">CONFIRM</button>
                 </div>
             </div>
         </div>
@@ -109,7 +109,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, ref } from 'vue';
+import { defineComponent, onBeforeMount, ref, watch } from 'vue';
 import Modal from '@/components/common/Modal.vue';
 import Close_Icon from '@/assets/icons/Close_Icon.vue';
 import { loadCustomers } from '@/api/relations/customers';
@@ -143,6 +143,19 @@ export default defineComponent ({
         const getCustomers = async () => {
             customers.value = await loadCustomers()
         }
+
+        watch(() => [customerId.value, productId.value, requiredDate.value, shippedName.value,
+                    shippedAddress.value, shippedCity.value, shippedCountry.value, shippedPostalCode.value],
+        () => {
+            if(
+                customerId.value === '' || productId.value === '' || requiredDate.value === '' || shippedName.value === '' ||
+                shippedAddress.value === '' || shippedCity.value === '' || shippedCountry.value === '' || shippedPostalCode.value === ''
+            ) {
+                buttonEnable.value = false
+            } else {
+                buttonEnable.value = true
+            }
+        })
 
         const getProducts = async () => {
             products.value = await loadProducts()
@@ -179,6 +192,7 @@ export default defineComponent ({
         })
 
         return {
+            buttonEnable,
             productId,
             customerId,
             requiredDate,
