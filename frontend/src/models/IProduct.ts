@@ -8,4 +8,7 @@ export interface IProduct {
     unitPrice: number
     unitsInStock: number
     unitsOnOrder: number
+
+    supplierId: string
+    categoryId: string
 }
