@@ -81,7 +81,7 @@
             <div class="footer">
                 <div class="content">
                     <button class="cancel" @click="closeModal()">CANCEL</button>
-                    <button class="confirm" @click="addNewRecord()">CONFIRM</button>
+                    <button :disabled="!buttonEnable" class="confirm" @click="addNewRecord()">CONFIRM</button>
                 </div>
             </div>
         </div>
@@ -89,7 +89,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, ref } from 'vue';
+import { defineComponent, onBeforeMount, ref, watch } from 'vue';
 import Modal from '@/components/common/Modal.vue';
 import Close_Icon from '@/assets/icons/Close_Icon.vue';
 import { loadSuppliers } from '@/api/reporting/suppliers';
@@ -126,6 +126,19 @@ export default defineComponent ({
             categories.value = await loadCategories()
         }
 
+        watch(() => [supplierId.value, categoryId.value, productName.value,
+                    unitPrice.value, unitsOnOrder.value, unitsInStock.value],
+        () => {
+            if(
+                supplierId.value === '' || categoryId.value === '' || productName.value === '' ||
+                unitPrice.value === '' || unitsOnOrder.value === '' || unitsInStock.value === ''
+            ) {
+                buttonEnable.value = false
+            } else {
+                buttonEnable.value = true
+            }
+        })
+
         const addNewRecord = () => {
             let newProductRecord: Partial<IProduct> = {}
                 newProductRecord.supplierId = supplierId.value
@@ -155,6 +168,7 @@ export default defineComponent ({
         })
 
         return {
+            buttonEnable,
             supplierId,
             categoryId,
             productName,
