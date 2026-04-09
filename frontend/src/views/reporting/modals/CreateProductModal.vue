@@ -131,7 +131,8 @@ export default defineComponent ({
         () => {
             if(
                 supplierId.value === '' || categoryId.value === '' || productName.value === '' ||
-                unitPrice.value === '' || unitsOnOrder.value === '' || unitsInStock.value === ''
+                unitPrice.value === '' || unitsOnOrder.value === '' || unitsInStock.value === '' ||
+                unitPrice.value === undefined || unitsOnOrder.value === undefined || unitsInStock.value === undefined
             ) {
                 buttonEnable.value = false
             } else {
