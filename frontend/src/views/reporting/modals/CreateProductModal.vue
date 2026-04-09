@@ -94,6 +94,8 @@ import Modal from '@/components/common/Modal.vue';
 import Close_Icon from '@/assets/icons/Close_Icon.vue';
 import { loadSuppliers } from '@/api/reporting/suppliers';
 import { loadCategories } from '@/api/common/categories';
+import { IProduct } from '@/models/IProduct';
+import { addNewProduct } from '@/api/reporting/products';
 
 export default defineComponent ({
     components: {
@@ -125,7 +127,17 @@ export default defineComponent ({
         }
 
         const addNewRecord = () => {
-            closeModal()
+            let newProductRecord: Partial<IProduct> = {}
+                newProductRecord.supplierId = supplierId.value
+                newProductRecord.categoryId = categoryId.value
+                newProductRecord.productName = productName.value
+                newProductRecord.unitPrice = Number.parseInt(unitPrice.value)
+                newProductRecord.unitsOnOrder = Number.parseInt(unitsOnOrder.value)
+                newProductRecord.unitsInStock = Number.parseInt(unitsInStock.value)
+
+                addNewProduct(newProductRecord).then(() => {
+                    closeModal()
+                })
         }
 
         const closeModal = () => {
