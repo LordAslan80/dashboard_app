@@ -18,6 +18,9 @@
             </label>
             <select v-model="supplierId">
                 <option value="" disabled selected>Select supplier</option>
+                <option v-for="supplier in suppliers" :key="supplier.id" :value="supplier.id">
+                    {{ supplier.company_name }}
+                </option>
             </select>
     
             <label>
@@ -30,6 +33,9 @@
             </label>
             <select v-model="categoryId">
                 <option value="" disabled selected>Select category</option>
+                <option v-for="category in categories" :key="category.id" :value="category.id">
+                    {{ category.name }}
+                </option>
             </select>
     
             <label>
@@ -83,9 +89,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, onBeforeMount, ref } from 'vue';
 import Modal from '@/components/common/Modal.vue';
 import Close_Icon from '@/assets/icons/Close_Icon.vue';
+import { loadSuppliers } from '@/api/reporting/suppliers';
+import { loadCategories } from '@/api/common/categories';
 
 export default defineComponent ({
     components: {
@@ -93,7 +101,7 @@ export default defineComponent ({
         Close_Icon
     },
 
-    emits: ['close-modal'],
+    emits: ['close-modal', 'update-list'],
 
     setup(_, context) {
         const buttonEnable = ref(false)
@@ -105,6 +113,17 @@ export default defineComponent ({
         const unitsOnOrder = ref('')
         const unitsInStock = ref('')
 
+        const suppliers = ref()
+        const categories = ref()
+
+        const getSuppliers = async () => {
+            suppliers.value = await loadSuppliers()
+        }
+
+        const getCategories = async () => {
+            categories.value = await loadCategories()
+        }
+
         const addNewRecord = () => {
             closeModal()
         }
@@ -112,6 +131,11 @@ export default defineComponent ({
         const closeModal = () => {
             context.emit('close-modal')
         }
+
+        onBeforeMount(() => {
+            getSuppliers()
+            getCategories()
+        })
 
         return {
             supplierId,
@@ -121,7 +145,9 @@ export default defineComponent ({
             unitsOnOrder,
             unitsInStock,
             closeModal,
-            addNewRecord
+            addNewRecord,
+            suppliers,
+            categories
         }
     }
 })
