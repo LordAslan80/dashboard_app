@@ -111,9 +111,9 @@ export default defineComponent ({
         const supplierId = ref('')
         const categoryId = ref('')
         const productName = ref('')
-        const unitPrice = ref('')
-        const unitsOnOrder = ref('')
-        const unitsInStock = ref('')
+        const unitPrice = ref()
+        const unitsOnOrder = ref()
+        const unitsInStock = ref()
 
         const suppliers = ref()
         const categories = ref()
@@ -144,9 +144,9 @@ export default defineComponent ({
                 newProductRecord.supplierId = supplierId.value
                 newProductRecord.categoryId = categoryId.value
                 newProductRecord.productName = productName.value
-                newProductRecord.unitPrice = Number.parseInt(unitPrice.value)
-                newProductRecord.unitsOnOrder = Number.parseInt(unitsOnOrder.value)
-                newProductRecord.unitsInStock = Number.parseInt(unitsInStock.value)
+                newProductRecord.unitPrice = unitPrice.value
+                newProductRecord.unitsOnOrder = unitsOnOrder.value
+                newProductRecord.unitsInStock = unitsInStock.value
 
                 addNewProduct(newProductRecord).then(() => {
                     updateList()
