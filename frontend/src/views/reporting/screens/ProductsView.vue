@@ -7,7 +7,7 @@
         </button>
     </header>
 
-    <create-product-modal v-if="isCreateModalVisible" @close-modal="closeModal"/>
+    <create-product-modal v-if="isCreateModalVisible" @close-modal="closeModal" @update-list="updateList"/>
 
     <div>
         <table>
@@ -75,19 +75,20 @@ export default defineComponent ({
             isCreateModalVisible.value = false
         }
 
-        const getProducts = async () => {
+        const updateList = async () => {
             products.value = await loadProducts()
         }
 
         onMounted(() => {
-            getProducts()
+            updateList()
         })
 
         return {
             products,
             isCreateModalVisible,
             openCreateModal,
-            closeModal
+            closeModal,
+            updateList
         }
     }
 })

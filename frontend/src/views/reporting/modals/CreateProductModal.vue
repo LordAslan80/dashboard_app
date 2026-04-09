@@ -136,12 +136,17 @@ export default defineComponent ({
                 newProductRecord.unitsInStock = Number.parseInt(unitsInStock.value)
 
                 addNewProduct(newProductRecord).then(() => {
+                    updateList()
                     closeModal()
                 })
         }
 
         const closeModal = () => {
             context.emit('close-modal')
+        }
+
+        const updateList = () => {
+            context.emit('update-list')
         }
 
         onBeforeMount(() => {
