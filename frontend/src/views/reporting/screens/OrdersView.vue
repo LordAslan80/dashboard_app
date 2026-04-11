@@ -9,6 +9,8 @@
 
     <create-order-modal v-if="isCreateModalVisible" @close-modal="closeModal" @update-list="updateList"/>
 
+    <edit-order-modal v-if="isEditModalVisible" :order="orderToUpdate" @close-modal="closeModal" @handle-edit="handleEdit"/>
+
     <div>
         <table>
             <thead>
@@ -39,7 +41,7 @@
                     <td>{{ item.shipped_postal_code }}</td>
                     <td>{{ item.shipped_country }}</td>
                     <td>
-                        <span>
+                        <span @click="openEditModal(item.id)">
                             <Edit_Icon class="table_icon"/>
                         </span>
                         <span>
@@ -55,9 +57,10 @@
 
 <script lang="ts">
 import formatDate from '@/composables/util';
-import { loadOrders } from '@/api/reporting/orders';
-import { defineComponent, onMounted, ref } from 'vue';
+import { loadOrders, editRecordInOrders } from '@/api/reporting/orders';
+import { defineComponent, onMounted, ref, toRaw } from 'vue';
 import CreateOrderModal from '../modals/CreateOrderModal.vue';
+import EditOrderModal from '../modals/EditOrderModal.vue';
 import Edit_Icon from '@/assets/icons/Edit_Icon.vue';
 import Trash_Icon from '@/assets/icons/Trash_Icon.vue';
 import Plus_Icon from '@/assets/icons/Plus_Icon.vue';
@@ -65,6 +68,7 @@ import Plus_Icon from '@/assets/icons/Plus_Icon.vue';
 export default defineComponent ({
     components: {
         CreateOrderModal,
+        EditOrderModal,
         Edit_Icon,
         Trash_Icon,
         Plus_Icon
@@ -73,17 +77,39 @@ export default defineComponent ({
     setup() {
         const orders = ref()
         const isCreateModalVisible = ref(false)
+        const isEditModalVisible = ref(false)
+
+        const orderIdToUpdate = ref('')
+        const orderToUpdate = ref()
 
         const openCreateModal = () => {
             isCreateModalVisible.value = true
         }
 
+        const openEditModal = (id: string) => {
+            orderIdToUpdate.value = id
+            orderToUpdate.value = toRaw(orders.value).find((x: any) => x.id === id)
+            isEditModalVisible.value = true
+        }
+
         const closeModal = () => {
             isCreateModalVisible.value = false
+            isEditModalVisible.value = false
         }
 
         const updateList = async () => {
             orders.value = await loadOrders()
+        }
+
+        const handleEdit = (editedOrder: any) => {
+            isEditModalVisible.value = false
+
+            editRecordInOrders(orderIdToUpdate.value, editedOrder)
+            .then(() => {
+                closeModal()
+                updateList()
+                orderIdToUpdate.value = ''
+            })
         }
 
         onMounted(() => {
@@ -93,6 +119,10 @@ export default defineComponent ({
         return {
             orders,
             isCreateModalVisible,
+            isEditModalVisible,
+            orderToUpdate,
+            openEditModal,
+            handleEdit,
             openCreateModal,
             closeModal,
             formatDate,
