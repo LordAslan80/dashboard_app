@@ -50,3 +50,26 @@ export const addNewOrder = (newOrderRecord: Partial<IOrder>) => {
         })
     })
 }
+
+export const editRecordInOrders = (id: string, editedOrder: IOrder) => {
+    return new Promise((resolve, reject) => {
+        api
+            .patch(`${URLS.orders}${id}/`, {
+                shipped_name: editedOrder.shippedName,
+                shipped_address: editedOrder.shippedAddress,
+                shipped_city: editedOrder.shippedCity,
+                shipped_country: editedOrder.shippedCountry,
+                shipped_postal_code: editedOrder.shippedPostalCode
+            })
+            .then((response: AxiosResponse) => {
+                if(response.status === 200) {
+                    resolve(response.data)
+                } else {
+                    reject()
+                }
+            })
+            .catch((error: AxiosError) => {
+                console.log("caught error in edit record in orders ===> ", error)
+            })
+    })
+}
