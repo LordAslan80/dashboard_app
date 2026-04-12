@@ -70,3 +70,20 @@ export const editRecordInProducts = (id: string, editedProduct: IProduct) => {
             })
     })
 }
+
+export const deleteRecordInProducts = (id: string) => {
+    return new Promise((resolve, reject) => {
+        api
+            .delete(`${URLS.products}${id}/`)
+            .then((response: AxiosResponse) => {
+                if(response.status === 204) {
+                    resolve(response.data)
+                } else {
+                    reject()
+                }
+            })
+            .catch((error: AxiosError) => {
+                console.log("caught error in delete record in products ===> ", error)
+            })
+    })
+}
