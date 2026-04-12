@@ -11,6 +11,9 @@
 
     <edit-product-modal v-if="isEditModalVisible" :product="productToUpdate" @close-modal="closeModal" @handle-edit="handleEdit"/>
 
+    <confirm-delete-modal v-if="isConfirmDeleteModalVisible" :entity-type="'Product'"
+    :entity-id="productIdToDelete" @close-modal="closeModal" @handle-delete="handleDelete"/>
+
     <div>
         <table>
             <thead>
@@ -38,7 +41,7 @@
                         <span @click="openEditModal(item.id)">
                             <Edit_Icon class="table_icon"/>
                         </span>
-                        <span>
+                        <span @click="openDeleteModal(item.id)">
                             <Trash_Icon class="table_icon__left"/>
                         </span>
                     </td>
@@ -50,13 +53,14 @@
 
 
 <script lang="ts">
-import { editRecordInProducts, loadProducts } from '@/api/reporting/products';
+import { deleteRecordInProducts, editRecordInProducts, loadProducts } from '@/api/reporting/products';
 import { defineComponent, onMounted, ref, toRaw } from 'vue';
 import Edit_Icon from '@/assets/icons/Edit_Icon.vue';
 import Trash_Icon from '@/assets/icons/Trash_Icon.vue';
 import Plus_Icon from '@/assets/icons/Plus_Icon.vue';
 import CreateProductModal from '../modals/CreateProductModal.vue';
 import EditProductModal from '../modals/EditProductModal.vue';
+import ConfirmDeleteModal from '../modals/ConfirmDeleteModal.vue';
 
 export default defineComponent ({
     components: {
@@ -64,16 +68,19 @@ export default defineComponent ({
         Trash_Icon,
         Plus_Icon,
         CreateProductModal,
-        EditProductModal
+        EditProductModal,
+        ConfirmDeleteModal
     },
 
     setup() {
         const products = ref()
         const isCreateModalVisible = ref(false)
         const isEditModalVisible = ref(false)
+        const isConfirmDeleteModalVisible = ref(false)
 
         const productIdToUpdate = ref('')
         const productToUpdate = ref()
+        const productIdToDelete = ref()
 
         const openCreateModal = () => {
             isCreateModalVisible.value = true
@@ -85,9 +92,15 @@ export default defineComponent ({
             isEditModalVisible.value = true
         }
 
+        const openDeleteModal = (id: string) => {
+            productIdToDelete.value = id
+            isConfirmDeleteModalVisible.value = true
+        }
+
         const closeModal = () => {
             isCreateModalVisible.value = false
             isEditModalVisible.value = false
+            isConfirmDeleteModalVisible.value = false
         }
 
         const updateList = async () => {
@@ -105,6 +118,17 @@ export default defineComponent ({
             })
         }
 
+        const handleDelete = () => {
+            isConfirmDeleteModalVisible.value = false
+
+            deleteRecordInProducts(productIdToDelete.value)
+            .then(() => {
+                closeModal()
+                updateList()
+                productIdToDelete.value = ''
+            })
+        }
+
         onMounted(() => {
             updateList()
         })
@@ -113,12 +137,16 @@ export default defineComponent ({
             products,
             isCreateModalVisible,
             isEditModalVisible,
+            isConfirmDeleteModalVisible,
             productToUpdate,
+            productIdToDelete,
             openCreateModal,
             openEditModal,
+            openDeleteModal,
             closeModal,
             updateList,
-            handleEdit
+            handleEdit,
+            handleDelete
         }
     }
 })
