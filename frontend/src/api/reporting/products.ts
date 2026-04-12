@@ -46,3 +46,27 @@ export const addNewProduct = (newProductRecord: Partial<IProduct>) => {
             })
     })
 }
+
+export const editRecordInProducts = (id: string, editedProduct: IProduct) => {
+    return new Promise((resolve, reject) => {
+        api
+            .patch(`${URLS.products}${id}/`, {
+                supplier: editedProduct.supplierId,
+                category: editedProduct.categoryId,
+                product_name: editedProduct.productName,
+                unit_price: editedProduct.unitPrice,
+                units_on_order: editedProduct.unitsOnOrder,
+                units_in_stock: editedProduct.unitsInStock
+            })
+            .then((response: AxiosResponse) => {
+                if(response.status === 200) {
+                    resolve(response.data)
+                } else {
+                    reject()
+                }
+            })
+            .catch((error: AxiosError) => {
+                console.log("caught error in edit record in products ===> ", error)
+            })
+    })
+}
