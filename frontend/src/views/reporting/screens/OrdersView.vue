@@ -11,6 +11,9 @@
 
     <edit-order-modal v-if="isEditModalVisible" :order="orderToUpdate" @close-modal="closeModal" @handle-edit="handleEdit"/>
 
+    <confirm-delete-modal v-if="isConfirmDeleteModalVisible" :entity-type="'Order'"
+    :entity-id="orderIdToDelete" @close-modal="closeModal" @handle-delete="handleDelete"/>
+
     <div>
         <table>
             <thead>
@@ -44,7 +47,7 @@
                         <span @click="openEditModal(item.id)">
                             <Edit_Icon class="table_icon"/>
                         </span>
-                        <span>
+                        <span @click="openDeleteModal(item.id)">
                             <Trash_Icon class="table_icon__left"/>
                         </span>
                     </td>
@@ -57,10 +60,11 @@
 
 <script lang="ts">
 import formatDate from '@/composables/util';
-import { loadOrders, editRecordInOrders } from '@/api/reporting/orders';
+import { loadOrders, editRecordInOrders, deleteRecordInOrders } from '@/api/reporting/orders';
 import { defineComponent, onMounted, ref, toRaw } from 'vue';
 import CreateOrderModal from '../modals/CreateOrderModal.vue';
 import EditOrderModal from '../modals/EditOrderModal.vue';
+import ConfirmDeleteModal from '../modals/ConfirmDeleteModal.vue';
 import Edit_Icon from '@/assets/icons/Edit_Icon.vue';
 import Trash_Icon from '@/assets/icons/Trash_Icon.vue';
 import Plus_Icon from '@/assets/icons/Plus_Icon.vue';
@@ -69,6 +73,7 @@ export default defineComponent ({
     components: {
         CreateOrderModal,
         EditOrderModal,
+        ConfirmDeleteModal,
         Edit_Icon,
         Trash_Icon,
         Plus_Icon
@@ -78,9 +83,11 @@ export default defineComponent ({
         const orders = ref()
         const isCreateModalVisible = ref(false)
         const isEditModalVisible = ref(false)
+        const isConfirmDeleteModalVisible = ref(false)
 
         const orderIdToUpdate = ref('')
         const orderToUpdate = ref()
+        const orderIdToDelete = ref()
 
         const openCreateModal = () => {
             isCreateModalVisible.value = true
@@ -92,9 +99,15 @@ export default defineComponent ({
             isEditModalVisible.value = true
         }
 
+        const openDeleteModal = (id: string) => {
+            orderIdToDelete.value = id
+            isConfirmDeleteModalVisible.value = true
+        }
+        
         const closeModal = () => {
             isCreateModalVisible.value = false
             isEditModalVisible.value = false
+            isConfirmDeleteModalVisible.value = false
         }
 
         const updateList = async () => {
@@ -112,6 +125,17 @@ export default defineComponent ({
             })
         }
 
+        const handleDelete = () => {
+            isConfirmDeleteModalVisible.value = false
+
+            deleteRecordInOrders(orderIdToDelete.value)
+            .then(() => {
+                closeModal()
+                updateList()
+                orderIdToDelete.value = ''
+            })
+        }
+
         onMounted(() => {
             updateList()
         })
@@ -120,10 +144,14 @@ export default defineComponent ({
             orders,
             isCreateModalVisible,
             isEditModalVisible,
+            isConfirmDeleteModalVisible,
             orderToUpdate,
+            orderIdToDelete,
             openEditModal,
             handleEdit,
+            handleDelete,
             openCreateModal,
+            openDeleteModal,
             closeModal,
             formatDate,
             updateList
