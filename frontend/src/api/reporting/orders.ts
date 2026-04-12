@@ -73,3 +73,20 @@ export const editRecordInOrders = (id: string, editedOrder: IOrder) => {
             })
     })
 }
+
+export const deleteRecordInOrders = (id: string) => {
+    return new Promise((resolve, reject) => {
+        api
+            .delete(`${URLS.orders}${id}/`)
+            .then((response: AxiosResponse) => {
+                if(response.status === 204) {
+                    resolve(response.data)
+                } else {
+                    reject()
+                }
+            })
+            .catch((error: AxiosError) => {
+                console.log("caught error in delete record in orders ===> ", error)
+            })
+    })
+}
