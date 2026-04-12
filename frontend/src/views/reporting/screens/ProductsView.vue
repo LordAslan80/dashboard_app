@@ -9,6 +9,8 @@
 
     <create-product-modal v-if="isCreateModalVisible" @close-modal="closeModal" @update-list="updateList"/>
 
+    <edit-product-modal v-if="isEditModalVisible" :product="productToUpdate" @close-modal="closeModal" @handle-edit="handleEdit"/>
+
     <div>
         <table>
             <thead>
@@ -33,7 +35,7 @@
                     <td>{{ item.units_on_order }}</td>
                     <td>{{ item.supplier.company_name }}</td>
                     <td>
-                        <span>
+                        <span @click="openEditModal(item.id)">
                             <Edit_Icon class="table_icon"/>
                         </span>
                         <span>
@@ -48,35 +50,59 @@
 
 
 <script lang="ts">
-import { loadProducts } from '@/api/reporting/products';
-import { defineComponent, onMounted, ref } from 'vue';
+import { editRecordInProducts, loadProducts } from '@/api/reporting/products';
+import { defineComponent, onMounted, ref, toRaw } from 'vue';
 import Edit_Icon from '@/assets/icons/Edit_Icon.vue';
 import Trash_Icon from '@/assets/icons/Trash_Icon.vue';
 import Plus_Icon from '@/assets/icons/Plus_Icon.vue';
 import CreateProductModal from '../modals/CreateProductModal.vue';
+import EditProductModal from '../modals/EditProductModal.vue';
 
 export default defineComponent ({
     components: {
         Edit_Icon,
         Trash_Icon,
         Plus_Icon,
-        CreateProductModal
+        CreateProductModal,
+        EditProductModal
     },
 
     setup() {
         const products = ref()
         const isCreateModalVisible = ref(false)
+        const isEditModalVisible = ref(false)
+
+        const productIdToUpdate = ref('')
+        const productToUpdate = ref()
 
         const openCreateModal = () => {
             isCreateModalVisible.value = true
         }
 
+        const openEditModal = (id: string) => {
+            productIdToUpdate.value = id
+            productToUpdate.value = toRaw(products.value).find((x: any) => x.id === id)
+            isEditModalVisible.value = true
+        }
+
         const closeModal = () => {
             isCreateModalVisible.value = false
+            isEditModalVisible.value = false
         }
 
         const updateList = async () => {
             products.value = await loadProducts()
+        }
+
+        const handleEdit = (editedProduct: any) => {
+            isEditModalVisible.value = false
+
+            editRecordInProducts(productIdToUpdate.value, editedProduct)
+            .then(() => {
+                closeModal()
+                updateList()
+                productIdToUpdate.value = ''
+            })
         }
 
         onMounted(() => {
@@ -86,9 +112,13 @@ export default defineComponent ({
         return {
             products,
             isCreateModalVisible,
+            isEditModalVisible,
+            productToUpdate,
             openCreateModal,
+            openEditModal,
             closeModal,
-            updateList
+            updateList,
+            handleEdit
         }
     }
 })
