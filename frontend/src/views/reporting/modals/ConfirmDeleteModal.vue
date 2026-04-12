@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="header">
                 <div class="content">
-                    <span class="title">Order properties</span>
+                    <span class="title">Confirm Delete</span>
                     <Close_Icon class="icon" @click="closeModal()"/>
                 </div>
             </div>
