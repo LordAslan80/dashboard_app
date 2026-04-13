@@ -61,13 +61,14 @@
 <script lang="ts">
 import formatDate from '@/composables/util';
 import { loadOrders, editRecordInOrders, deleteRecordInOrders } from '@/api/reporting/orders';
-import { defineComponent, onMounted, ref, toRaw } from 'vue';
+import { computed, defineComponent, onMounted, ref, toRaw } from 'vue';
 import CreateOrderModal from '../modals/CreateOrderModal.vue';
 import EditOrderModal from '../modals/EditOrderModal.vue';
 import ConfirmDeleteModal from '../modals/ConfirmDeleteModal.vue';
 import Edit_Icon from '@/assets/icons/Edit_Icon.vue';
 import Trash_Icon from '@/assets/icons/Trash_Icon.vue';
 import Plus_Icon from '@/assets/icons/Plus_Icon.vue';
+import { useStore } from 'vuex';
 
 export default defineComponent ({
     components: {
@@ -80,7 +81,14 @@ export default defineComponent ({
     },
 
     setup() {
-        const orders = ref()
+        const store = useStore()
+
+        const orders = computed(() => {
+            let data = store.getters['orderManagement/getOrders']
+            if(!data) return
+            return data
+        })
+
         const isCreateModalVisible = ref(false)
         const isEditModalVisible = ref(false)
         const isConfirmDeleteModalVisible = ref(false)
@@ -111,7 +119,9 @@ export default defineComponent ({
         }
 
         const updateList = async () => {
-            orders.value = await loadOrders()
+            return Promise.allSettled([
+                store.dispatch('orderManagement/setOrders', {})
+            ])
         }
 
         const handleEdit = (editedOrder: any) => {
