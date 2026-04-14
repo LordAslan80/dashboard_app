@@ -54,13 +54,14 @@
 
 <script lang="ts">
 import { deleteRecordInProducts, editRecordInProducts, loadProducts } from '@/api/reporting/products';
-import { defineComponent, onMounted, ref, toRaw } from 'vue';
+import { computed, defineComponent, onMounted, ref, toRaw } from 'vue';
 import Edit_Icon from '@/assets/icons/Edit_Icon.vue';
 import Trash_Icon from '@/assets/icons/Trash_Icon.vue';
 import Plus_Icon from '@/assets/icons/Plus_Icon.vue';
 import CreateProductModal from '../modals/CreateProductModal.vue';
 import EditProductModal from '../modals/EditProductModal.vue';
 import ConfirmDeleteModal from '../modals/ConfirmDeleteModal.vue';
+import { useStore } from 'vuex';
 
 export default defineComponent ({
     components: {
@@ -73,7 +74,14 @@ export default defineComponent ({
     },
 
     setup() {
-        const products = ref()
+        const store = useStore()
+
+        const products = computed(() => {
+            let data = store.getters["productManagement/getProducts"]
+            if(!data) return
+            return data
+        })
+
         const isCreateModalVisible = ref(false)
         const isEditModalVisible = ref(false)
         const isConfirmDeleteModalVisible = ref(false)
@@ -104,7 +112,9 @@ export default defineComponent ({
         }
 
         const updateList = async () => {
-            products.value = await loadProducts()
+            return Promise.allSettled([
+                store.dispatch("productManagement/setProducts", {})
+            ])
         }
 
         const handleEdit = (editedProduct: any) => {
