@@ -32,7 +32,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item, index) in orders" :key="index">
+                <tr v-for="(item, index) in orders" :key="index" @click="openDetails(item)">
                     <td>{{ item.id }}</td>
                     <td>{{ formatDate(item.order_date) }}</td>
                     <td>{{ item.customer.first_name }} {{ item.customer.last_name }}</td>
@@ -44,10 +44,10 @@
                     <td>{{ item.shipped_postal_code }}</td>
                     <td>{{ item.shipped_country }}</td>
                     <td>
-                        <span @click="openEditModal(item.id)">
+                        <span @click.stop @click="openEditModal(item.id)">
                             <Edit_Icon class="table_icon"/>
                         </span>
-                        <span @click="openDeleteModal(item.id)">
+                        <span @click.stop @click="openDeleteModal(item.id)">
                             <Trash_Icon class="table_icon__left"/>
                         </span>
                     </td>
@@ -69,6 +69,8 @@ import Edit_Icon from '@/assets/icons/Edit_Icon.vue';
 import Trash_Icon from '@/assets/icons/Trash_Icon.vue';
 import Plus_Icon from '@/assets/icons/Plus_Icon.vue';
 import { useStore } from 'vuex';
+import router from '@/router';
+import { IOrder } from '@/models/IOrder';
 
 export default defineComponent ({
     components: {
@@ -97,6 +99,12 @@ export default defineComponent ({
         const orderToUpdate = ref()
         const orderIdToDelete = ref()
 
+        const setDataForDetailsPage = (item: IOrder) => {
+            return store.dispatch("orderManagement/setOrderDetails", {
+                ...item
+            })
+        }
+
         const openCreateModal = () => {
             isCreateModalVisible.value = true
         }
@@ -110,6 +118,19 @@ export default defineComponent ({
         const openDeleteModal = (id: string) => {
             orderIdToDelete.value = id
             isConfirmDeleteModalVisible.value = true
+        }
+
+        const openDetails = (item: IOrder) => {
+            let id = item.id
+
+            setDataForDetailsPage(item)
+            
+            router.push({
+                name: "order-details",
+                params: {
+                    id
+                }
+            })
         }
         
         const closeModal = () => {
@@ -147,7 +168,7 @@ export default defineComponent ({
         }
 
         onMounted(() => {
-            updateList()
+            if(!orders.value) updateList()
         })
 
         return {
@@ -162,6 +183,7 @@ export default defineComponent ({
             handleDelete,
             openCreateModal,
             openDeleteModal,
+            openDetails,
             closeModal,
             formatDate,
             updateList
