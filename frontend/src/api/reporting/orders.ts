@@ -90,3 +90,22 @@ export const deleteRecordInOrders = (id: string) => {
             })
     })
 }
+
+export const getOrderDetails = (orderId: string) => {
+
+    return new Promise((resolve, reject) => {
+      api
+        .get(`${URLS.orders}${orderId}/`)
+        .then((response: AxiosResponse) => {
+  
+          if (response.status === 200) {
+            resolve(response.data);
+          } else {
+            reject()
+          }
+        })
+        .catch((error: AxiosError) => {
+          console.log("caught error in order details ===> ", error)
+        })
+    })
+  }  
