@@ -162,8 +162,10 @@ export default defineComponent ({
             deleteRecordInOrders(orderIdToDelete.value)
             .then(() => {
                 closeModal()
-                updateList()
-                orderIdToDelete.value = ''
+                return store.dispatch("orderManagement/deleteOrder", orderIdToDelete.value)
+            })
+            .catch((error) => {
+                console.log(error)
             })
         }
 

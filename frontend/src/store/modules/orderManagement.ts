@@ -13,6 +13,9 @@ export default {
         },
         SET_ORDER_DETAILS(state: GlobalState, context: IOrder) {
             state.orderDetails = context
+        },
+        DELETE_ORDER(state: GlobalState, context: string) {
+            state.orders = state.orders.filter(x => x.id !== context)
         }
     },
     actions: {
@@ -23,6 +26,9 @@ export default {
         },
         async setOrderDetails({commit}: {commit: Commit}, payload: IOrder) {
             commit("SET_ORDER_DETAILS", payload)
+        },
+        async deleteOrder({commit}: {commit: Commit}, payload: string) {
+            commit("DELETE_ORDER", payload)
         }
     },
     getters: {
