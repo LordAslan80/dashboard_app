@@ -4,6 +4,6 @@ import { IProduct } from "@/models/IProduct";
 export interface GlobalState {
     orders: any[],
     orderDetails: IOrder,
-    products: IProduct[],
+    products: any[],
     productDetails: IProduct
 }

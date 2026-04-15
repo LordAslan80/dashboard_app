@@ -139,10 +139,11 @@ export default defineComponent ({
         const handleEdit = (editedProduct: any) => {
             isEditModalVisible.value = false
 
+            let id = productIdToUpdate.value
             editRecordInProducts(productIdToUpdate.value, editedProduct)
             .then(() => {
                 closeModal()
-                updateList()
+                store.dispatch("productManagement/updateProduct", {editedProduct, id})
                 productIdToUpdate.value = ''
             })
         }
@@ -153,8 +154,10 @@ export default defineComponent ({
             deleteRecordInProducts(productIdToDelete.value)
             .then(() => {
                 closeModal()
-                updateList()
-                productIdToDelete.value = ''
+                return store.dispatch("productManagement/deleteProduct", productIdToDelete.value)
+            })
+            .catch((error) => {
+                console.log(error)
             })
         }
 

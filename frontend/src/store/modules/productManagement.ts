@@ -13,6 +13,20 @@ export default {
         },
         SET_PRODUCT_DETAILS(state: GlobalState, context: IProduct) {
             state.productDetails = context
+        },
+        DELETE_PRODUCT(state: GlobalState, context: string) {
+            state.products = state.products.filter(x => x.id !== context)
+        },
+        UPDATE_PRODUCT(state: GlobalState, context: any) {
+            let index = state.products.findIndex(x => x.id === context.id)
+            state.products[index] = { ...state.products[index],
+                supplier: context.editedProduct.supplier,
+                category: context.editedProduct.category,
+                product_name: context.editedProduct.productName,
+                unit_price: context.editedProduct.unitPrice,
+                units_on_order: context.editedProduct.unitsOnOrder,
+                units_in_stock: context.editedProduct.unitsInStock
+            }
         }
     },
     actions: {
@@ -23,6 +37,12 @@ export default {
         },
         async setProductDetails({commit}: {commit: Commit}, payload: IProduct) {
             commit("SET_PRODUCT_DETAILS", payload)
+        },
+        async deleteProduct({commit}: {commit: Commit}, payload: string) {
+            commit("DELETE_PRODUCT", payload)
+        },
+        async updateProduct({commit}: {commit: Commit}, payload: any) {
+            commit("UPDATE_PRODUCT", payload)
         }
     },
     getters: {
