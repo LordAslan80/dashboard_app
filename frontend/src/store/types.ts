@@ -5,4 +5,5 @@ export interface GlobalState {
     orders: IOrder[],
     orderDetails: IOrder,
     products: IProduct[],
+    productDetails: IProduct
 }
