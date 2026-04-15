@@ -29,7 +29,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item, index) in products" :key="index">
+                <tr v-for="(item, index) in products" :key="index" @click="openDetails(item)">
                     <td>{{ item.id }}</td>
                     <td>{{ item.product_name }}</td>
                     <td>{{ item.category.name }}</td>
@@ -38,10 +38,10 @@
                     <td>{{ item.units_on_order }}</td>
                     <td>{{ item.supplier.company_name }}</td>
                     <td>
-                        <span @click="openEditModal(item.id)">
+                        <span @click.stop @click="openEditModal(item.id)">
                             <Edit_Icon class="table_icon"/>
                         </span>
-                        <span @click="openDeleteModal(item.id)">
+                        <span @click.stop @click="openDeleteModal(item.id)">
                             <Trash_Icon class="table_icon__left"/>
                         </span>
                     </td>
@@ -62,6 +62,8 @@ import CreateProductModal from '../modals/CreateProductModal.vue';
 import EditProductModal from '../modals/EditProductModal.vue';
 import ConfirmDeleteModal from '../modals/ConfirmDeleteModal.vue';
 import { useStore } from 'vuex';
+import { IProduct } from '@/models/IProduct';
+import router from '@/router';
 
 export default defineComponent ({
     components: {
@@ -90,6 +92,12 @@ export default defineComponent ({
         const productToUpdate = ref()
         const productIdToDelete = ref()
 
+        const setDataForDetailsPage = (item: IProduct) => {
+            return store.dispatch("productManagement/setProductDetails", {
+                ...item
+            })
+        }
+
         const openCreateModal = () => {
             isCreateModalVisible.value = true
         }
@@ -103,6 +111,17 @@ export default defineComponent ({
         const openDeleteModal = (id: string) => {
             productIdToDelete.value = id
             isConfirmDeleteModalVisible.value = true
+        }
+
+        const openDetails = (item: IProduct) => {
+            let id = item.id
+            setDataForDetailsPage(item)
+            router.push({
+                name: "product-details",
+                params: {
+                    id
+                }
+            })
         }
 
         const closeModal = () => {
@@ -140,7 +159,7 @@ export default defineComponent ({
         }
 
         onMounted(() => {
-            updateList()
+            if(!products.value) updateList()
         })
 
         return {
@@ -153,6 +172,7 @@ export default defineComponent ({
             openCreateModal,
             openEditModal,
             openDeleteModal,
+            openDetails,
             closeModal,
             updateList,
             handleEdit,
