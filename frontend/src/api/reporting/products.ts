@@ -51,8 +51,8 @@ export const editRecordInProducts = (id: string, editedProduct: IProduct) => {
     return new Promise((resolve, reject) => {
         api
             .patch(`${URLS.products}${id}/`, {
-                supplier: editedProduct.supplierId,
-                category: editedProduct.categoryId,
+                supplier: editedProduct.supplier!.id,
+                category: editedProduct.category!.id,
                 product_name: editedProduct.productName,
                 unit_price: editedProduct.unitPrice,
                 units_on_order: editedProduct.unitsOnOrder,
