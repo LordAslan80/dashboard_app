@@ -87,3 +87,16 @@ export const deleteRecordInProducts = (id: string) => {
             })
     })
 }
+
+export const getProductDetails = (productId: string) => {
+    return new Promise((resolve, reject) => {
+        api
+            .get(`${URLS.products}${productId}/`)
+            .then((response: AxiosResponse) => {
+                response.status === 200 ? resolve(response.data) : reject()
+            })
+            .catch((error: AxiosError) => {
+                console.log("caught error in product details ===> ", error)
+            })
+    })
+}
