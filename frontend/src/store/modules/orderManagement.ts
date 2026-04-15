@@ -16,6 +16,16 @@ export default {
         },
         DELETE_ORDER(state: GlobalState, context: string) {
             state.orders = state.orders.filter(x => x.id !== context)
+        },
+        UPDATE_ORDER(state: GlobalState, context: any) {
+            let index = state.orders.findIndex(x => x.id === context.id)
+            state.orders[index] = { ...state.orders[index],
+                shipped_address: context.editedOrder.shippedAddress,
+                shipped_city: context.editedOrder.shippedCity,
+                shipped_country: context.editedOrder.shippedCountry,
+                shipped_name: context.editedOrder.shippedName,
+                shipped_postal_code: context.editedOrder.shippedPostalCode
+            }
         }
     },
     actions: {
@@ -29,6 +39,9 @@ export default {
         },
         async deleteOrder({commit}: {commit: Commit}, payload: string) {
             commit("DELETE_ORDER", payload)
+        },
+        async updateOrder({commit}: {commit: Commit}, payload: any) {
+            commit("UPDATE_ORDER", payload)
         }
     },
     getters: {

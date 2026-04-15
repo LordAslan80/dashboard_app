@@ -2,7 +2,7 @@ import { IOrder } from "@/models/IOrder";
 import { IProduct } from "@/models/IProduct";
 
 export interface GlobalState {
-    orders: IOrder[],
+    orders: any[],
     orderDetails: IOrder,
     products: IProduct[],
     productDetails: IProduct

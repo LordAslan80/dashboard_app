@@ -148,10 +148,11 @@ export default defineComponent ({
         const handleEdit = (editedOrder: any) => {
             isEditModalVisible.value = false
 
+            let id = orderIdToUpdate.value
             editRecordInOrders(orderIdToUpdate.value, editedOrder)
             .then(() => {
                 closeModal()
-                updateList()
+                store.dispatch("orderManagement/updateOrder", {editedOrder, id})
                 orderIdToUpdate.value = ''
             })
         }
