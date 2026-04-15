@@ -160,8 +160,8 @@ export default defineComponent({
 
         const handleUpdateProduct = () => {
             let editedProduct: Partial<IProduct> = {
-                supplierId: supplierId.value,
-                categoryId: categoryId.value,
+                supplier: suppliers.value.find((x:any) => x.id === supplierId.value),
+                category: categories.value.find((x:any) => x.id === categoryId.value),
                 productName: productName.value,
                 unitPrice: unitPrice.value,
                 unitsOnOrder: unitsOnOrder.value,
