@@ -7,7 +7,7 @@
         </button>
     </header>
 
-    <create-product-modal v-if="isCreateModalVisible" @close-modal="closeModal" @update-list="updateList"/>
+    <create-product-modal v-if="isCreateModalVisible" @close-modal="closeModal"/>
 
     <edit-product-modal v-if="isEditModalVisible" :product="productToUpdate" @close-modal="closeModal" @handle-edit="handleEdit"/>
 
@@ -177,7 +177,6 @@ export default defineComponent ({
             openDeleteModal,
             openDetails,
             closeModal,
-            updateList,
             handleEdit,
             handleDelete
         }

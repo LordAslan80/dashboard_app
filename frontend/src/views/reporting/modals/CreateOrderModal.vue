@@ -124,7 +124,7 @@ export default defineComponent ({
         Close_Icon
     },
 
-    emits: ['close-modal', 'update-list'],
+    emits: ['close-modal'],
 
     setup(_, context) {
         const store = useStore()
@@ -184,10 +184,6 @@ export default defineComponent ({
 
         const closeModal = () => {
             context.emit('close-modal')
-        }
-        
-        const updateList = () => {
-            context.emit('update-list')
         }
 
         onBeforeMount(() => {

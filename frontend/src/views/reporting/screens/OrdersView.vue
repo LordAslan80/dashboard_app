@@ -7,7 +7,7 @@
         </button>
     </header>
 
-    <create-order-modal v-if="isCreateModalVisible" @close-modal="closeModal" @update-list="updateList"/>
+    <create-order-modal v-if="isCreateModalVisible" @close-modal="closeModal"/>
 
     <edit-order-modal v-if="isEditModalVisible" :order="orderToUpdate" @close-modal="closeModal" @handle-edit="handleEdit"/>
 
@@ -188,8 +188,7 @@ export default defineComponent ({
             openDeleteModal,
             openDetails,
             closeModal,
-            formatDate,
-            updateList
+            formatDate
         }
     }
 })
