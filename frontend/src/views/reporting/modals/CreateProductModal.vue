@@ -96,6 +96,7 @@ import { loadSuppliers } from '@/api/reporting/suppliers';
 import { loadCategories } from '@/api/common/categories';
 import { IProduct } from '@/models/IProduct';
 import { addNewProduct } from '@/api/reporting/products';
+import { useStore } from 'vuex';
 
 export default defineComponent ({
     components: {
@@ -106,6 +107,8 @@ export default defineComponent ({
     emits: ['close-modal', 'update-list'],
 
     setup(_, context) {
+        const store = useStore()
+
         const buttonEnable = ref(false)
         
         const supplierId = ref('')
@@ -149,8 +152,8 @@ export default defineComponent ({
                 newProductRecord.unitsOnOrder = unitsOnOrder.value
                 newProductRecord.unitsInStock = unitsInStock.value
 
-                addNewProduct(newProductRecord).then(() => {
-                    updateList()
+                addNewProduct(newProductRecord).then((responseObject) => {
+                    store.dispatch("productManagement/postProduct", {responseObject})
                     closeModal()
                 })
         }

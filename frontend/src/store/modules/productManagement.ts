@@ -27,6 +27,9 @@ export default {
                 units_on_order: context.editedProduct.unitsOnOrder,
                 units_in_stock: context.editedProduct.unitsInStock
             }
+        },
+        POST_PRODUCT(state: GlobalState, context: any) {
+            state.products.unshift(context.responseObject)
         }
     },
     actions: {
@@ -43,6 +46,9 @@ export default {
         },
         async updateProduct({commit}: {commit: Commit}, payload: any) {
             commit("UPDATE_PRODUCT", payload)
+        },
+        async postProduct({commit}: {commit: Commit}, payload: any) {
+            commit("POST_PRODUCT", payload)
         }
     },
     getters: {
