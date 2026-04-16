@@ -26,6 +26,9 @@ export default {
                 shipped_name: context.editedOrder.shippedName,
                 shipped_postal_code: context.editedOrder.shippedPostalCode
             }
+        },
+        POST_ORDER(state: GlobalState, context: any) {
+            state.orders.unshift(context.responseObject)
         }
     },
     actions: {
@@ -42,6 +45,9 @@ export default {
         },
         async updateOrder({commit}: {commit: Commit}, payload: any) {
             commit("UPDATE_ORDER", payload)
+        },
+        async postOrder({commit}: {commit: Commit}, payload: any) {
+            commit("POST_ORDER", payload)
         }
     },
     getters: {

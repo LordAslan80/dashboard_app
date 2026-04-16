@@ -116,6 +116,7 @@ import { loadCustomers } from '@/api/relations/customers';
 import { loadProducts } from '@/api/reporting/products';
 import { IOrder } from '@/models/IOrder';
 import { addNewOrder } from '@/api/reporting/orders';
+import { useStore } from 'vuex';
 
 export default defineComponent ({
     components: {
@@ -126,6 +127,8 @@ export default defineComponent ({
     emits: ['close-modal', 'update-list'],
 
     setup(_, context) {
+        const store = useStore()
+
         const buttonEnable = ref(false)
         
         const productId = ref('')
@@ -172,10 +175,11 @@ export default defineComponent ({
                 newOrderRecord.shippedCountry = shippedCountry.value
                 newOrderRecord.shippedPostalCode = shippedPostalCode.value
 
-                addNewOrder(newOrderRecord).then(() => {
-                    updateList()
+                addNewOrder(newOrderRecord).then((responseObject) => {
+                    store.dispatch("orderManagement/postOrder", {responseObject})
                     closeModal()
                 })
+                .catch((error) => { console.log(error) })
         }
 
         const closeModal = () => {

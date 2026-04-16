@@ -40,7 +40,7 @@ export const addNewOrder = (newOrderRecord: Partial<IOrder>) => {
         })
         .then((response: AxiosResponse) => {
             if(response.status === 201) {
-                resolve(response.data)
+                return resolve(response.data)
             } else {
                 reject()
             }
