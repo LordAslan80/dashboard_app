@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Third-Party apps
     "rest_framework",
+    "django_filters",
     # Local apps
     "reporting.apps.ReportingConfig",
 ]
