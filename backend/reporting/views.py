@@ -1,16 +1,22 @@
 from rest_framework.viewsets import ModelViewSet
+from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
 from .serializers import (
     OrderSerializer,
     CategorySerializer,
     CustomerSerializer,
     SupplierSerializer,
     ProductSerializer,
+    CountryFilterSerializer,
+    CityFilterSerializer,
 )
 from .models import Order, Category, Customer, Supplier, Product
 
 
 class OrderViewSet(ModelViewSet):
     serializer_class = OrderSerializer
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
+    filterset_fields = ["shipped_country", "shipped_city"]
 
     def get_queryset(self):
         return Order.objects.all().order_by("-order_date")
@@ -40,3 +46,13 @@ class ProductViewSet(ModelViewSet):
 
     def get_queryset(self):
         return Product.objects.all().order_by("category__name", "unit_price")
+
+
+class CountryFilterViewSet(ModelViewSet):
+    queryset = Order.objects.values("shipped_country").distinct()
+    serializer_class = CountryFilterSerializer
+
+
+class CityFilterViewSet(ModelViewSet):
+    queryset = Order.objects.values("shipped_city").distinct()
+    serializer_class = CityFilterSerializer

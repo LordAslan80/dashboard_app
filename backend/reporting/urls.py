@@ -6,6 +6,8 @@ from .views import (
     ProductViewSet,
     CustomerViewSet,
     SupplierViewSet,
+    CountryFilterViewSet,
+    CityFilterViewSet,
 )
 
 
@@ -15,6 +17,8 @@ router.register("categories", CategoryViewSet, basename="categories")
 router.register("products", ProductViewSet, basename="products")
 router.register("customers", CustomerViewSet, basename="customers")
 router.register("suppliers", SupplierViewSet, basename="suppliers")
+router.register("country-filters", CountryFilterViewSet, basename="country-filters")
+router.register("city-filters", CityFilterViewSet, basename="city-filters")
 
 
 urlpatterns = [path("", include(router.urls))]

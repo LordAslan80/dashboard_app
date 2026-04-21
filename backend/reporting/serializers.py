@@ -40,3 +40,15 @@ class CategorySerializer(ModelSerializer):
     class Meta:
         model = Category
         fields = "__all__"
+
+
+class CountryFilterSerializer(ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ["shipped_country"]
+
+
+class CityFilterSerializer(ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ["shipped_city"]
