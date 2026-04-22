@@ -20,7 +20,10 @@ class OrderViewSet(ModelViewSet):
     search_fields = ["product__product_name", "customer__last_name"]
 
     def get_queryset(self):
-        return Order.objects.all().order_by("-order_date")
+        if self.request.GET.get("order_by") == "order_date":
+            return Order.objects.all().order_by("-order_date")
+        else:
+            return Order.objects.all().order_by("id")
 
 
 class CategoryViewSet(ModelViewSet):
