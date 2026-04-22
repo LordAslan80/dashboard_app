@@ -59,6 +59,11 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "reporting.pagination.PageNumberSizePagination",
+    "PAGE_SIZE": 10,
+}
+
 ROOT_URLCONF = "core.urls"
 
 TEMPLATES = [
