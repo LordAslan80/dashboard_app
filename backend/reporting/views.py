@@ -49,7 +49,15 @@ class ProductViewSet(ModelViewSet):
     serializer_class = ProductSerializer
 
     def get_queryset(self):
-        return Product.objects.all().order_by("category__name", "unit_price")
+        match self.request.GET.get("order_by"):
+            case "unit_price":
+                return Product.objects.all().order_by("unit_price")
+            case "units_in_stock":
+                return Product.objects.all().order_by("units_in_stock")
+            case "units_on_order":
+                return Product.objects.all().order_by("units_on_order")
+            case _:
+                return Product.objects.all().order_by("id")
 
 
 class CountryFilterViewSet(ModelViewSet):
