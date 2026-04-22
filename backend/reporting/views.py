@@ -17,6 +17,7 @@ class OrderViewSet(ModelViewSet):
     serializer_class = OrderSerializer
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
     filterset_fields = ["shipped_country", "shipped_city"]
+    search_fields = ["product__product_name", "customer__last_name"]
 
     def get_queryset(self):
         return Order.objects.all().order_by("-order_date")
