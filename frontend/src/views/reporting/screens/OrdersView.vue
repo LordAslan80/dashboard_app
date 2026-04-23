@@ -7,6 +7,37 @@
         </button>
     </header>
 
+    <div class="filters">
+        <div class="filter-wrapper">
+            <p>Shipped country:</p>
+            <select>
+                <option value="" disabled selected>All countries</option>
+            </select>
+        </div>
+
+        <div class="filter-wrapper">
+            <p>Shipped city:</p>
+            <select>
+                <option value="" disabled selected>All cities</option>
+            </select>
+        </div>
+        
+        <div class="filter-wrapper">
+            <p>Search:</p>
+            <input type="text" placeholder="Search (product or customer lastname)">
+        </div>
+
+        <div class="filter-wrapper">
+            <p>Filter:</p>
+            <button id="filter" class="filters_button">Filter</button>
+        </div>
+
+        <div class="filter-wrapper">
+            <p>Refresh:</p>
+            <button id="refresh" class="filters_button">Refresh</button>
+        </div>
+    </div>
+
     <create-order-modal v-if="isCreateModalVisible" @close-modal="closeModal"/>
 
     <edit-order-modal v-if="isEditModalVisible" :order="orderToUpdate" @close-modal="closeModal" @handle-edit="handleEdit"/>
