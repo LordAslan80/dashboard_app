@@ -11,7 +11,7 @@ export const loadCustomers = () => {
         api.get(URLS.customers)
         .then((response: AxiosResponse) => {
             if(response.status === 200) {
-                resolve(response.data)
+                resolve(response.data.results)
             } else {
                 reject()
             }
