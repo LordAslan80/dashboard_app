@@ -12,7 +12,7 @@ export const loadOrders = () => {
         api.get(URLS.orders)
         .then((response: AxiosResponse) => {
             if(response.status === 200) {
-                resolve(response.data)
+                resolve(response.data.results)
             } else {
                 reject()
             }

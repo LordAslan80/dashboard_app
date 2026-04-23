@@ -12,7 +12,7 @@ export const loadCategories = () => {
             .get(URLS.categories)
             .then((response: AxiosResponse) => {
                 if(response.status === 200) {
-                    resolve(response.data)
+                    resolve(response.data.results)
                 } else {
                     reject()
                 }
