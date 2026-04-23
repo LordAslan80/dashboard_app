@@ -60,11 +60,19 @@ class ProductViewSet(ModelViewSet):
                 return Product.objects.all().order_by("id")
 
 
+class ProductFilterViewSet(ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    paginator = None
+
+
 class CountryFilterViewSet(ModelViewSet):
     queryset = Order.objects.values("shipped_country").distinct()
     serializer_class = CountryFilterSerializer
+    paginator = None
 
 
 class CityFilterViewSet(ModelViewSet):
     queryset = Order.objects.values("shipped_city").distinct()
     serializer_class = CityFilterSerializer
+    paginator = None
