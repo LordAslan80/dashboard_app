@@ -13,7 +13,7 @@ class PageNumberSizePagination(PageNumberPagination):
                     ("count", self.page.paginator.count),
                     ("page", self.page.number),
                     ("number_of_pages", self.page.paginator.num_pages),
-                    ("result", data),
+                    ("results", data),
                 ]
             )
         )
