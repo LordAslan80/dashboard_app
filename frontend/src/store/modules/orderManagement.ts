@@ -32,8 +32,12 @@ export default {
         }
     },
     actions: {
-        async setOrders({commit}: {commit: Commit}) {
-            let data = await loadOrders()
+        async setOrders({commit}: {commit: Commit}, payload: any) {
+            let data = await loadOrders(
+                payload.filteredCountry,
+                payload.filteredCity,
+                payload.search
+            )
             commit("SET_ORDERS", data)
             return data
         },
