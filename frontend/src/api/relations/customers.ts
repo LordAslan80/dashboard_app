@@ -8,7 +8,7 @@ const URLS = {
 
 export const loadCustomers = () => {
     return new Promise((resolve, reject) => {
-        api.get(URLS.customers)
+        api.get(URLS.customers, {})
         .then((response: AxiosResponse) => {
             if(response.status === 200) {
                 resolve(response.data.results)

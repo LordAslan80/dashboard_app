@@ -9,7 +9,7 @@ const URLS = {
 
 export const loadProducts = () => {
     return new Promise((resolve, reject) => {
-        api.get(URLS.products)
+        api.get(URLS.products, {})
         .then((response: AxiosResponse) => {
             if(response.status === 200) {
                 resolve(response.data.results)
@@ -91,7 +91,7 @@ export const deleteRecordInProducts = (id: string) => {
 export const getProductDetails = (productId: string) => {
     return new Promise((resolve, reject) => {
         api
-            .get(`${URLS.products}${productId}/`)
+            .get(`${URLS.products}${productId}/`, {})
             .then((response: AxiosResponse) => {
                 response.status === 200 ? resolve(response.data) : reject()
             })

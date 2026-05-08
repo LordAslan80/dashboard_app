@@ -8,7 +8,7 @@ const URLS = {
 
 export const loadCities = () => {
     return new Promise((resolve, reject) => {
-        api.get(URLS.cities)
+        api.get(URLS.cities, {})
         .then((response: AxiosResponse) => {
             if(response.status === 200) {
                 resolve(response.data)
