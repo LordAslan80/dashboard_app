@@ -7,9 +7,9 @@ const URLS = {
     orders: "orders/"
 }
 
-export const loadOrders = () => {
+export const loadOrders = (shipped_country: string, shipped_city: string, search: string) => {
     return new Promise((resolve, reject) => {
-        api.get(URLS.orders)
+        api.get(URLS.orders, {params: {shipped_country, shipped_city, search}})
         .then((response: AxiosResponse) => {
             if(response.status === 200) {
                 resolve(response.data.results)
@@ -95,7 +95,7 @@ export const getOrderDetails = (orderId: string) => {
 
     return new Promise((resolve, reject) => {
       api
-        .get(`${URLS.orders}${orderId}/`)
+        .get(`${URLS.orders}${orderId}/`, {})
         .then((response: AxiosResponse) => {
   
           if (response.status === 200) {
