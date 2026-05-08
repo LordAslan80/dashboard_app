@@ -18,8 +18,9 @@
 
         <div class="filter-wrapper">
             <p>Shipped city:</p>
-            <select>
+            <select v-model="filteredCity">
                 <option value="" disabled selected>All cities</option>
+                <option v-for="(city, i) in cities" :key="i" :value="city">{{ city }}</option>
             </select>
         </div>
         
@@ -104,6 +105,7 @@ import { useStore } from 'vuex';
 import router from '@/router';
 import { IOrder } from '@/models/IOrder';
 import { loadCountries } from '@/api/common/countries';
+import { loadCities } from '@/api/common/cities';
 
 export default defineComponent ({
     components: {
@@ -126,6 +128,9 @@ export default defineComponent ({
 
         const countries = ref()
         const filteredCountry = ref()
+        
+        const cities = ref()
+        const filteredCity = ref()
 
         const isCreateModalVisible = ref(false)
         const isEditModalVisible = ref(false)
@@ -179,6 +184,11 @@ export default defineComponent ({
             let data: any = await loadCountries()
             countries.value = extractValues(data)
         }
+        
+        const getCities = async () => {
+            let data: any = await loadCities()
+            cities.value = extractValues(data)
+        }
 
         const updateList = async () => {
             return Promise.allSettled([
@@ -214,6 +224,7 @@ export default defineComponent ({
         onMounted(() => {
             if(!orders.value) updateList()
             getCountries()
+            getCities()
         })
 
         return {
@@ -225,6 +236,8 @@ export default defineComponent ({
             orderIdToDelete,
             countries,
             filteredCountry,
+            cities,
+            filteredCity,
             openEditModal,
             handleEdit,
             handleDelete,
