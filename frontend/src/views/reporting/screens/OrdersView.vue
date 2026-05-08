@@ -10,8 +10,9 @@
     <div class="filters">
         <div class="filter-wrapper">
             <p>Shipped country:</p>
-            <select>
+            <select v-model="filteredCountry">
                 <option value="" disabled selected>All countries</option>
+                <option v-for="(country, i) in countries" :key="i" :value="country">{{ country }}</option>
             </select>
         </div>
 
@@ -90,7 +91,7 @@
 
 
 <script lang="ts">
-import formatDate from '@/composables/util';
+import formatDate, { extractValues } from '@/composables/util';
 import { loadOrders, editRecordInOrders, deleteRecordInOrders } from '@/api/reporting/orders';
 import { computed, defineComponent, onMounted, ref, toRaw } from 'vue';
 import CreateOrderModal from '../modals/CreateOrderModal.vue';
@@ -102,6 +103,7 @@ import Plus_Icon from '@/assets/icons/Plus_Icon.vue';
 import { useStore } from 'vuex';
 import router from '@/router';
 import { IOrder } from '@/models/IOrder';
+import { loadCountries } from '@/api/common/countries';
 
 export default defineComponent ({
     components: {
@@ -121,6 +123,9 @@ export default defineComponent ({
             if(!data) return
             return data
         })
+
+        const countries = ref()
+        const filteredCountry = ref()
 
         const isCreateModalVisible = ref(false)
         const isEditModalVisible = ref(false)
@@ -170,6 +175,11 @@ export default defineComponent ({
             isConfirmDeleteModalVisible.value = false
         }
 
+        const getCountries = async () => {
+            let data: any = await loadCountries()
+            countries.value = extractValues(data)
+        }
+
         const updateList = async () => {
             return Promise.allSettled([
                 store.dispatch('orderManagement/setOrders', {})
@@ -203,6 +213,7 @@ export default defineComponent ({
 
         onMounted(() => {
             if(!orders.value) updateList()
+            getCountries()
         })
 
         return {
@@ -212,6 +223,8 @@ export default defineComponent ({
             isConfirmDeleteModalVisible,
             orderToUpdate,
             orderIdToDelete,
+            countries,
+            filteredCountry,
             openEditModal,
             handleEdit,
             handleDelete,
