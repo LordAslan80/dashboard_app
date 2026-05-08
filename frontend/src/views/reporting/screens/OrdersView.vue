@@ -26,17 +26,17 @@
         
         <div class="filter-wrapper">
             <p>Search:</p>
-            <input type="text" placeholder="Search (product or customer lastname)">
+            <input v-model="search" type="text" placeholder="Search (product or customer)" @keyup.enter="filterList">
         </div>
 
         <div class="filter-wrapper">
             <p>Filter:</p>
-            <button id="filter" class="filters_button">Filter</button>
+            <button id="filter" class="filters_button" @click="filterList">Filter</button>
         </div>
 
         <div class="filter-wrapper">
             <p>Refresh:</p>
-            <button id="refresh" class="filters_button">Refresh</button>
+            <button id="refresh" class="filters_button" @click="refreshList">Refresh</button>
         </div>
     </div>
 
@@ -126,6 +126,8 @@ export default defineComponent ({
             return data
         })
 
+        const search = ref()
+
         const countries = ref()
         const filteredCountry = ref()
         
@@ -180,6 +182,17 @@ export default defineComponent ({
             isConfirmDeleteModalVisible.value = false
         }
 
+        const filterList = () => {
+            updateList()
+        }
+
+        const refreshList = () => {
+            filteredCity.value = ""
+            filteredCountry.value = ""
+            search.value = ""
+            updateList()
+        }
+
         const getCountries = async () => {
             let data: any = await loadCountries()
             countries.value = extractValues(data)
@@ -192,7 +205,11 @@ export default defineComponent ({
 
         const updateList = async () => {
             return Promise.allSettled([
-                store.dispatch('orderManagement/setOrders', {})
+                store.dispatch('orderManagement/setOrders', {
+                    filteredCity: filteredCity.value,
+                    filteredCountry: filteredCountry.value,
+                    search: search.value
+                })
             ])
         }
 
@@ -238,6 +255,7 @@ export default defineComponent ({
             filteredCountry,
             cities,
             filteredCity,
+            search,
             openEditModal,
             handleEdit,
             handleDelete,
@@ -245,7 +263,9 @@ export default defineComponent ({
             openDeleteModal,
             openDetails,
             closeModal,
-            formatDate
+            formatDate,
+            filterList,
+            refreshList
         }
     }
 })
