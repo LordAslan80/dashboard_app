@@ -7,9 +7,9 @@ const URLS = {
     products: "products/"
 }
 
-export const loadProducts = () => {
+export const loadProducts = (supplier__company_name: string, unit_price: string, search: string) => {
     return new Promise((resolve, reject) => {
-        api.get(URLS.products, {})
+        api.get(URLS.products, {params: {supplier__company_name, unit_price, search}})
         .then((response: AxiosResponse) => {
             if(response.status === 200) {
                 resolve(response.data.results)

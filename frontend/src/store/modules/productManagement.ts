@@ -33,8 +33,12 @@ export default {
         }
     },
     actions: {
-        async setProducts({commit}: {commit: Commit}) {
-            let data = await loadProducts()
+        async setProducts({commit}: {commit: Commit}, payload: any) {
+            let data = await loadProducts(
+                payload.filteredSupplier,
+                payload.filteredPrice,
+                payload.search
+            )
             commit("SET_PRODUCTS", data)
             return data
         },
