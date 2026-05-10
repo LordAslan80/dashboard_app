@@ -7,6 +7,39 @@
         </button>
     </header>
 
+    <div class="filters">
+        <div class="filter-wrapper">
+            <p>Supplier:</p>
+            <select v-model="filteredSupplier">
+                <option value="" disabled selected>All suppliers</option>
+                <option v-for="(supplier, i) in suppliers" :key="i" :value="supplier.company_name">{{ supplier.company_name }}</option>
+            </select>
+        </div>
+
+        <div class="filter-wrapper">
+            <p>Unit price:</p>
+            <select v-model="filteredPrice">
+                <option value="" disabled selected>All unit prices</option>
+                <option v-for="(price, i) in prices" :key="i" :value="price">{{ price }}</option>
+            </select>
+        </div>
+        
+        <div class="filter-wrapper">
+            <p>Search:</p>
+            <input v-model="search" type="text" placeholder="Search (product or category)" @keyup.enter="filterList">
+        </div>
+
+        <div class="filter-wrapper">
+            <p>Filter:</p>
+            <button id="filter" class="filters_button" @click="filterList">Filter</button>
+        </div>
+
+        <div class="filter-wrapper">
+            <p>Refresh:</p>
+            <button id="refresh" class="filters_button" @click="refreshList">Refresh</button>
+        </div>
+    </div>
+
     <create-product-modal v-if="isCreateModalVisible" @close-modal="closeModal"/>
 
     <edit-product-modal v-if="isEditModalVisible" :product="productToUpdate" @close-modal="closeModal" @handle-edit="handleEdit"/>
@@ -64,6 +97,9 @@ import ConfirmDeleteModal from '../modals/ConfirmDeleteModal.vue';
 import { useStore } from 'vuex';
 import { IProduct } from '@/models/IProduct';
 import router from '@/router';
+import { loadSuppliers } from '@/api/common/suppliers';
+import { extractValues } from '@/composables/util';
+import { loadProductPrices } from '@/api/common/productPrices';
 
 export default defineComponent ({
     components: {
@@ -83,6 +119,14 @@ export default defineComponent ({
             if(!data) return
             return data
         })
+
+        const search = ref()
+
+        const filteredSupplier = ref()
+        const suppliers = ref()
+
+        const filteredPrice = ref()
+        const prices = ref()
 
         const isCreateModalVisible = ref(false)
         const isEditModalVisible = ref(false)
@@ -130,9 +174,33 @@ export default defineComponent ({
             isConfirmDeleteModalVisible.value = false
         }
 
+        const filterList = () => {
+            updateList()
+        }
+
+        const refreshList = () => {
+            filteredSupplier.value = ""
+            filteredPrice.value = ""
+            search.value = ""
+            updateList()
+        }
+
+        const getSuppliers = async () => {
+            suppliers.value = await loadSuppliers()
+        }
+        
+        const getProductPrices = async () => {
+            let data: any = await loadProductPrices()
+            prices.value = extractValues(data)
+        }
+
         const updateList = async () => {
             return Promise.allSettled([
-                store.dispatch("productManagement/setProducts", {})
+                store.dispatch("productManagement/setProducts", {
+                    filteredSupplier: filteredSupplier.value,
+                    filteredPrice: filteredPrice.value,
+                    search: search.value
+                })
             ])
         }
 
@@ -163,6 +231,8 @@ export default defineComponent ({
 
         onMounted(() => {
             if(!products.value) updateList()
+            getSuppliers()
+            getProductPrices()
         })
 
         return {
@@ -172,13 +242,20 @@ export default defineComponent ({
             isConfirmDeleteModalVisible,
             productToUpdate,
             productIdToDelete,
+            filteredSupplier,
+            suppliers,
+            filteredPrice,
+            prices,
+            search,
             openCreateModal,
             openEditModal,
             openDeleteModal,
             openDetails,
             closeModal,
             handleEdit,
-            handleDelete
+            handleDelete,
+            filterList,
+            refreshList
         }
     }
 })
