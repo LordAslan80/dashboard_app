@@ -9,6 +9,7 @@ from .serializers import (
     ProductSerializer,
     CountryFilterSerializer,
     CityFilterSerializer,
+    ProductPriceFilterSerializer,
 )
 from .models import Order, Category, Customer, Supplier, Product
 
@@ -47,6 +48,9 @@ class SupplierViewSet(ModelViewSet):
 
 class ProductViewSet(ModelViewSet):
     serializer_class = ProductSerializer
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
+    filterset_fields = ["supplier__company_name", "unit_price"]
+    search_fields = ["product_name", "category__name"]
 
     def get_queryset(self):
         match self.request.GET.get("order_by"):
@@ -75,4 +79,16 @@ class CountryFilterViewSet(ModelViewSet):
 class CityFilterViewSet(ModelViewSet):
     queryset = Order.objects.values("shipped_city").distinct()
     serializer_class = CityFilterSerializer
+    paginator = None
+
+
+class SupplierFilterViewSet(ModelViewSet):
+    queryset = Supplier.objects.all()
+    serializer_class = SupplierSerializer
+    paginator = None
+
+
+class ProductPriceFilterViewSet(ModelViewSet):
+    queryset = Product.objects.values("unit_price").distinct()
+    serializer_class = ProductPriceFilterSerializer
     paginator = None
