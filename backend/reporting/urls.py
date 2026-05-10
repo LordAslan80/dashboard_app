@@ -9,6 +9,8 @@ from .views import (
     CountryFilterViewSet,
     CityFilterViewSet,
     ProductFilterViewSet,
+    SupplierFilterViewSet,
+    ProductPriceFilterViewSet,
 )
 
 
@@ -21,6 +23,10 @@ router.register("suppliers", SupplierViewSet, basename="suppliers")
 router.register("country-filters", CountryFilterViewSet, basename="country-filters")
 router.register("city-filters", CityFilterViewSet, basename="city-filters")
 router.register("product-filters", ProductFilterViewSet, basename="product-filters")
+router.register("supplier-filters", SupplierFilterViewSet, basename="supplier-filters")
+router.register(
+    "product-price-filters", ProductPriceFilterViewSet, basename="product-price-filters"
+)
 
 
 urlpatterns = [path("", include(router.urls))]
