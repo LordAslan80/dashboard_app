@@ -52,3 +52,9 @@ class CityFilterSerializer(ModelSerializer):
     class Meta:
         model = Order
         fields = ["shipped_city"]
+
+
+class ProductPriceFilterSerializer(ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ["unit_price"]
