@@ -87,6 +87,8 @@
                 </tr>
             </tbody>
         </table>
+
+        <pagination/>
     </div>
 </template>
 
@@ -106,6 +108,7 @@ import router from '@/router';
 import { IOrder } from '@/models/IOrder';
 import { loadCountries } from '@/api/common/countries';
 import { loadCities } from '@/api/common/cities';
+import Pagination from '@/components/common/Pagination.vue';
 
 export default defineComponent ({
     components: {
@@ -114,7 +117,8 @@ export default defineComponent ({
         ConfirmDeleteModal,
         Edit_Icon,
         Trash_Icon,
-        Plus_Icon
+        Plus_Icon,
+        Pagination
     },
 
     setup() {
