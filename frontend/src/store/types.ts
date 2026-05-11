@@ -5,5 +5,9 @@ export interface GlobalState {
     orders: any[],
     orderDetails: IOrder,
     products: any[],
-    productDetails: IProduct
+    productDetails: IProduct,
+    pages: number,
+    pageNumber: number,
+    count: number,
+    numberOfPages: number
 }
