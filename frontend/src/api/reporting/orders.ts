@@ -7,12 +7,18 @@ const URLS = {
     orders: "orders/"
 }
 
-export const loadOrders = (shipped_country: string, shipped_city: string, search: string) => {
+export const loadOrders = (
+    shipped_country: string,
+    shipped_city: string,
+    search: string,
+    page: string,
+    page_size: string
+) => {
     return new Promise((resolve, reject) => {
-        api.get(URLS.orders, {params: {shipped_country, shipped_city, search}})
+        api.get(URLS.orders, {params: {shipped_country, shipped_city, search, page, page_size}})
         .then((response: AxiosResponse) => {
             if(response.status === 200) {
-                resolve(response.data.results)
+                resolve(response.data)
             } else {
                 reject()
             }
