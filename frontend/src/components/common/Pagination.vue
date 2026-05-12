@@ -20,7 +20,7 @@
                     </span>
                     <span class="currentPage selectedPage">Page {{ currentPage }}</span>
                     <span v-for="i in rightDistance" :key="i" class="pageList"
-                        @click="updatePage(currentPage + i), calculateDistances('right')">{{ i }}</span>
+                        @click="updatePage(currentPage + i), calculateDistances('right')">{{ i + currentPage }}</span>
                     <span v-if="currentPage != numberOfPages" class="pageList"
                         @click="updatePage(numberOfPages), calculateDistances('last')">Last</span>
                 </div>
