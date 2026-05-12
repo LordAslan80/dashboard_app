@@ -64,7 +64,7 @@ export default {
             commit("POST_ORDER", payload)
         },
         async setNumberOfPages({commit}: {commit: Commit}, payload: any) {
-            commit("SET_NUMBER_OF_PAGES")
+            commit("SET_NUMBER_OF_PAGES", payload)
         }
     },
     getters: {
