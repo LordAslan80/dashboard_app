@@ -46,7 +46,7 @@ export default {
                 payload.page,
                 payload.per_page
             )
-            commit("SET_ORDERS", data.result)
+            commit("SET_ORDERS", data.results)
             commit("SET_COUNT", data.count)
             commit("SET_NUMBER_OF_PAGES", data.number_of_pages)
             return data

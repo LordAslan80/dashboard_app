@@ -12,17 +12,17 @@
                 </div>
 
                 <div>
-                    <span v-if="currentPage - 1 > 0" @click="updatePage(1) calculateDistances('first')"
+                    <span v-if="currentPage - 1 > 0" @click="updatePage(1), calculateDistances('first')"
                         class="pageList">First</span>
                     <span v-for="(i) in leftDistance" :key="i" class="pageList"
-                        @click="updatePage(currentPage - (leftDistance - (i - 1))) calculateDistances('left')">
+                        @click="updatePage(currentPage - (leftDistance - (i - 1))), calculateDistances('left')">
                         {{ currentPage - (leftDistance - (i - 1)) }}
                     </span>
                     <span class="currentPage selectedPage">Page {{ currentPage }}</span>
                     <span v-for="i in rightDistance" :key="i" class="pageList"
-                        @click="updatePage(currentPage + i) calculateDistances('right')">{{ i }}</span>
+                        @click="updatePage(currentPage + i), calculateDistances('right')">{{ i }}</span>
                     <span v-if="currentPage != numberOfPages" class="pageList"
-                        @click="updatePage(numberOfPages) calculateDistances('last')">Last</span>
+                        @click="updatePage(numberOfPages), calculateDistances('last')">Last</span>
                 </div>
 
                 <div>
