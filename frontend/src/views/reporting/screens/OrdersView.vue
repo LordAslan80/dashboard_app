@@ -88,7 +88,8 @@
             </tbody>
         </table>
 
-        <pagination/>
+        <pagination v-if="count > 0" :current-page="currentPage" :per-page="perPage" :count="count"
+            :number-of-pages="numberOfPages" @update-page="updatePage" @update-table-size="updateTableSize"/>
     </div>
 </template>
 
@@ -146,6 +147,30 @@ export default defineComponent ({
         const orderToUpdate = ref()
         const orderIdToDelete = ref()
 
+        const currentPage = ref(1)
+        const perPage = ref(5)
+
+        const numberOfPages = computed(() => {
+            let data = store.getters["orderManagement/getNumberOfPages"]
+            return Number(data)
+        })
+
+        const count = computed(() => {
+            let data = store.getters["orderManagement/getCount"]
+            return Number(data)
+        })
+
+        const updatePage = (page: any) => {
+            currentPage.value = page
+            updateList()
+        }
+
+        const updateTableSize = (pageSize: any) => {
+            perPage.value = pageSize.value
+            currentPage.value = 1
+            updateList()
+        }
+
         const setDataForDetailsPage = (item: IOrder) => {
             return store.dispatch("orderManagement/setOrderDetails", {
                 ...item
@@ -187,14 +212,16 @@ export default defineComponent ({
         }
 
         const filterList = () => {
+            currentPage.value = 1
             updateList()
         }
 
         const refreshList = () => {
-            filteredCity.value = ""
-            filteredCountry.value = ""
-            search.value = ""
-            updateList()
+            window.location.reload()
+            // filteredCity.value = ""
+            // filteredCountry.value = ""
+            // search.value = ""
+            // updateList()
         }
 
         const getCountries = async () => {
@@ -212,7 +239,9 @@ export default defineComponent ({
                 store.dispatch('orderManagement/setOrders', {
                     filteredCity: filteredCity.value,
                     filteredCountry: filteredCountry.value,
-                    search: search.value
+                    search: search.value,
+                    per_page: perPage.value,
+                    page: currentPage.value
                 })
             ])
         }
@@ -260,6 +289,10 @@ export default defineComponent ({
             cities,
             filteredCity,
             search,
+            currentPage,
+            perPage,
+            numberOfPages,
+            count,
             openEditModal,
             handleEdit,
             handleDelete,
@@ -269,7 +302,9 @@ export default defineComponent ({
             closeModal,
             formatDate,
             filterList,
-            refreshList
+            refreshList,
+            updatePage,
+            updateTableSize
         }
     }
 })
