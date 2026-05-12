@@ -30,14 +30,114 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent, onUpdated, ref, watch } from 'vue';
+import { useStore } from 'vuex';
 
 export default defineComponent({
-    components: {},
-    props: {},
-    emits: [],
-    setup(props, context) {
-        return {}
+    props: {
+        currentPage: {
+            type: Number,
+            required: true
+        },
+        count: {
+            type: Number,
+            required: true
+        },
+        numberOfPages: {
+            type: Number,
+            required: true
+        },
+        perPage: {
+            type: Number,
+            required: true
+        }
+    },
+    emits: ["update-page", "update-table-size"],
+    setup(props, {emit}) {
+        const store = useStore()
+
+        const numberOfPages = ref(props.numberOfPages)
+        const count = ref(props.count)
+        const leftDistance = ref(0)
+        const rightDistance = ref(numberOfPages.value - 2)
+        const perPage = ref(props.perPage)
+        const perPageEnable = ref(true)
+
+        let currentPage = computed(() => {
+            return props.currentPage
+        })
+
+        const updatedNumberOfPages = computed(() => {
+            let data = store.getters["orderManagement/getNumberOfPages"]
+            return data
+        })
+
+        const updatedCount = computed(() => {
+            let data = store.getters["orderManagement/getCount"]
+            return data
+        })
+
+        const calculateDistances = (position: string) => {
+            let current = Number(currentPage)
+
+            if(numberOfPages.value === current){
+                rightDistance.value = 0
+                leftDistance.value = numberOfPages.value - 2
+            } else {
+                rightDistance.value = (numberOfPages.value -1) - current
+
+                if(position === "right") leftDistance.value = current - 2
+                else if(position === "left") leftDistance.value = current - 2
+                else if(position === "first") leftDistance.value = 0
+            }
+        }
+
+        const updatePage = (page: any) => {
+            if(page <= 0 || page > numberOfPages.value) return
+            emit("update-page", page)
+            currentPage = page
+        }
+
+        const updateTableSize = async () => {
+            if(count.value < perPage.value) alert("Not a permited operation")
+            else {
+                numberOfPages.value = Math.ceil(count.value / perPage.value)
+                leftDistance.value = 0
+                rightDistance.value = numberOfPages.value - 2
+
+                await store.dispatch("orderManagement/setNumberOfPages", count.value)
+                emit("update-table-size", perPage)
+                updatePage(1)
+            }
+        }
+
+        watch(() => [numberOfPages.value, perPage.value, count.value],
+            () => {
+                rightDistance.value = numberOfPages.value === 1 ? (numberOfPages.value - 1) : (numberOfPages.value - 2)
+                leftDistance.value = 0
+
+                if(perPage.value >= count.value) perPageEnable.value = false
+                else perPageEnable.value = true
+            }
+        )
+
+        onUpdated(() => {
+            numberOfPages.value = updatedNumberOfPages.value
+            count.value = updatedCount.value
+        })
+
+        return {
+            numberOfPages,
+            count,
+            leftDistance,
+            rightDistance,
+            perPage,
+            perPageEnable,
+            currentPage,
+            calculateDistances,
+            updatePage,
+            updateTableSize
+        }
     }
 })
 </script>
