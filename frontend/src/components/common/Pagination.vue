@@ -3,21 +3,31 @@
         <div class="container">
             <div class="triple row">
                 <div>
-                    <span v-if="true">Showing 00 to 10 out of 100</span>
+                    <span v-if="count > 0">
+                        Showing {{ (currentPage - 1) * perPage + 1 }}
+                        to {{ currentPage * perPage < count ? currentPage * perPage : count }}
+                        out of {{ count }}
+                    </span>
                     <span v-else>No results</span>
                 </div>
 
                 <div>
-                    <span class="pageList">First</span>
-                    <span>- Left distance -</span>
-                    <span class="currentPage selectedPage">Page current</span>
-                    <span v-for="i in 5" :key="i" class="pageList">{{ i }}</span>
-                    <span class="pageList">Last</span>
+                    <span v-if="currentPage - 1 > 0" @click="updatePage(1) calculateDistances('first')"
+                        class="pageList">First</span>
+                    <span v-for="(i) in leftDistance" :key="i" class="pageList"
+                        @click="updatePage(currentPage - (leftDistance - (i - 1))) calculateDistances('left')">
+                        {{ currentPage - (leftDistance - (i - 1)) }}
+                    </span>
+                    <span class="currentPage selectedPage">Page {{ currentPage }}</span>
+                    <span v-for="i in rightDistance" :key="i" class="pageList"
+                        @click="updatePage(currentPage + i) calculateDistances('right')">{{ i }}</span>
+                    <span v-if="currentPage != numberOfPages" class="pageList"
+                        @click="updatePage(numberOfPages) calculateDistances('last')">Last</span>
                 </div>
 
                 <div>
                     <span class="tiny">Items per page</span>
-                    <select>
+                    <select v-model="perPage" @change="updateTableSize" :disabled="!perPageEnable">
                         <option :value="5">5</option>
                         <option :value="10">10</option>
                         <option :value="15">15</option>
