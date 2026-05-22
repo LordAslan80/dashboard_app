@@ -37,7 +37,8 @@ export default {
             let data = await loadProducts(
                 payload.filteredSupplier,
                 payload.filteredPrice,
-                payload.search
+                payload.search,
+                payload.order_by
             )
             commit("SET_PRODUCTS", data)
             return data

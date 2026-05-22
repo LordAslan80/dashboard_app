@@ -51,12 +51,28 @@
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th @click="setSortingBy(ORDER_BY_ID)">
+                        ID
+                        <Sorting_Icon class="sorting-icon"
+                        :class="orderBy===ORDER_BY_ID ? 'active-sorting' : ''"/>
+                    </th>
                     <th>Product name</th>
                     <th>Category</th>
-                    <th>Unit price</th>
-                    <th>Units in stock</th>
-                    <th>Units on order</th>
+                    <th @click="setSortingBy(ORDER_BY_UNIT_PRICE)">
+                        Unit price
+                        <Sorting_Icon class="sorting-icon"
+                        :class="orderBy===ORDER_BY_UNIT_PRICE ? 'active-sorting' : ''"/>
+                    </th>
+                    <th @click="setSortingBy(ORDER_BY_UNITS_IN_STOCK)">
+                        Units in stock
+                        <Sorting_Icon class="sorting-icon"
+                        :class="orderBy===ORDER_BY_UNITS_IN_STOCK ? 'active-sorting' : ''"/>
+                    </th>
+                    <th @click="setSortingBy(ORDER_BY_UNITS_ON_ORDER)">
+                        Units on order
+                        <Sorting_Icon class="sorting-icon"
+                        :class="orderBy===ORDER_BY_UNITS_ON_ORDER ? 'active-sorting' : ''"/>
+                    </th>
                     <th>Supplier</th>
                     <th>Actions</th>
                 </tr>
@@ -91,6 +107,7 @@ import { computed, defineComponent, onMounted, ref, toRaw } from 'vue';
 import Edit_Icon from '@/assets/icons/Edit_Icon.vue';
 import Trash_Icon from '@/assets/icons/Trash_Icon.vue';
 import Plus_Icon from '@/assets/icons/Plus_Icon.vue';
+import Sorting_Icon from '@/assets/icons/Sorting_Icon.vue';
 import CreateProductModal from '../modals/CreateProductModal.vue';
 import EditProductModal from '../modals/EditProductModal.vue';
 import ConfirmDeleteModal from '../modals/ConfirmDeleteModal.vue';
@@ -106,12 +123,18 @@ export default defineComponent ({
         Edit_Icon,
         Trash_Icon,
         Plus_Icon,
+        Sorting_Icon,
         CreateProductModal,
         EditProductModal,
         ConfirmDeleteModal
     },
 
     setup() {
+        const ORDER_BY_ID = "id"
+        const ORDER_BY_UNIT_PRICE = "unit_price"
+        const ORDER_BY_UNITS_IN_STOCK = "units_in_stock"
+        const ORDER_BY_UNITS_ON_ORDER = "units_on_order"
+
         const store = useStore()
 
         const products = computed(() => {
@@ -135,6 +158,8 @@ export default defineComponent ({
         const productIdToUpdate = ref('')
         const productToUpdate = ref()
         const productIdToDelete = ref()
+
+        const orderBy = ref('id')
 
         const setDataForDetailsPage = (item: IProduct) => {
             return store.dispatch("productManagement/setProductDetails", {
@@ -174,6 +199,11 @@ export default defineComponent ({
             isConfirmDeleteModalVisible.value = false
         }
 
+        const setSortingBy = (ordering: string) => {
+            orderBy.value = ordering
+            updateList()
+        }
+
         const filterList = () => {
             updateList()
         }
@@ -199,7 +229,8 @@ export default defineComponent ({
                 store.dispatch("productManagement/setProducts", {
                     filteredSupplier: filteredSupplier.value,
                     filteredPrice: filteredPrice.value,
-                    search: search.value
+                    search: search.value,
+                    order_by: orderBy.value
                 })
             ])
         }
@@ -236,6 +267,10 @@ export default defineComponent ({
         })
 
         return {
+            ORDER_BY_ID,
+            ORDER_BY_UNIT_PRICE,
+            ORDER_BY_UNITS_IN_STOCK,
+            ORDER_BY_UNITS_ON_ORDER,
             products,
             isCreateModalVisible,
             isEditModalVisible,
@@ -247,6 +282,7 @@ export default defineComponent ({
             filteredPrice,
             prices,
             search,
+            orderBy,
             openCreateModal,
             openEditModal,
             openDeleteModal,
@@ -255,7 +291,8 @@ export default defineComponent ({
             handleEdit,
             handleDelete,
             filterList,
-            refreshList
+            refreshList,
+            setSortingBy
         }
     }
 })
