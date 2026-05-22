@@ -29,12 +29,6 @@ export default {
         },
         POST_ORDER(state: GlobalState, context: any) {
             state.orders.unshift(context.responseObject)
-        },
-        SET_COUNT(state: GlobalState, context: any) {
-            state.count = context
-        },
-        SET_NUMBER_OF_PAGES(state: GlobalState, context: any) {
-            state.numberOfPages = context
         }
     },
     actions: {
@@ -48,8 +42,6 @@ export default {
                 payload.order_by
             )
             commit("SET_ORDERS", data.results)
-            commit("SET_COUNT", data.count)
-            commit("SET_NUMBER_OF_PAGES", data.number_of_pages)
             return data
         },
         async setOrderDetails({commit}: {commit: Commit}, payload: IOrder) {
@@ -63,9 +55,6 @@ export default {
         },
         async postOrder({commit}: {commit: Commit}, payload: any) {
             commit("POST_ORDER", payload)
-        },
-        async setNumberOfPages({commit}: {commit: Commit}, payload: any) {
-            commit("SET_NUMBER_OF_PAGES", payload)
         }
     },
     getters: {
@@ -74,12 +63,6 @@ export default {
         },
         getOrderDetails(state: GlobalState) {
             return state.orderDetails
-        },
-        getNumberOfPages(state: GlobalState) {
-            return state.numberOfPages
-        },
-        getCount(state: GlobalState) {
-            return state.count
         }
     }
 }

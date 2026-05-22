@@ -164,12 +164,12 @@ export default defineComponent ({
         const perPage = ref(5)
 
         const numberOfPages = computed(() => {
-            let data = store.getters["orderManagement/getNumberOfPages"]
+            let data = store.getters["paginationManagement/getNumberOfPages"]
             return Number(data)
         })
 
         const count = computed(() => {
-            let data = store.getters["orderManagement/getCount"]
+            let data = store.getters["paginationManagement/getCount"]
             return Number(data)
         })
 
@@ -253,7 +253,7 @@ export default defineComponent ({
         }
 
         const updateList = async () => {
-            return Promise.allSettled([
+            let data: any = await Promise.allSettled([
                 store.dispatch('orderManagement/setOrders', {
                     filteredCity: filteredCity.value,
                     filteredCountry: filteredCountry.value,
@@ -263,6 +263,12 @@ export default defineComponent ({
                     order_by: orderBy.value
                 })
             ])
+
+            let paginationInfo = data[0].value
+            store.dispatch("paginationManagement/setNumberOfPages", paginationInfo.number_of_pages)
+            store.dispatch("paginationManagement/setCount", paginationInfo.count)
+
+            return data
         }
 
         const handleEdit = (editedOrder: any) => {
