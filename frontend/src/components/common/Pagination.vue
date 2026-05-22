@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onUpdated, ref, watch } from 'vue';
+import { computed, defineComponent, onUnmounted, onUpdated, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 
 export default defineComponent({
@@ -78,12 +78,12 @@ export default defineComponent({
         })
 
         const updatedNumberOfPages = computed(() => {
-            let data = store.getters["orderManagement/getNumberOfPages"]
+            let data = store.getters["paginationManagement/getNumberOfPages"]
             return data
         })
 
         const updatedCount = computed(() => {
-            let data = store.getters["orderManagement/getCount"]
+            let data = store.getters["paginationManagement/getCount"]
             return data
         })
 
@@ -115,7 +115,7 @@ export default defineComponent({
                 leftDistance.value = 0
                 rightDistance.value = numberOfPages.value - 2
 
-                await store.dispatch("orderManagement/setNumberOfPages", count.value)
+                await store.dispatch("paginationManagement/setNumberOfPages", count.value)
                 emit("update-table-size", perPage)
                 updatePage(1)
             }
@@ -134,6 +134,10 @@ export default defineComponent({
         onUpdated(() => {
             numberOfPages.value = updatedNumberOfPages.value
             count.value = updatedCount.value
+        })
+
+        onUnmounted(() => {
+            store.dispatch("paginationManagement/resetValues")
         })
 
         return {
