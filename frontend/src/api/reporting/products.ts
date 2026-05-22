@@ -11,13 +11,15 @@ export const loadProducts = (
     supplier__company_name: string,
     unit_price: string,
     search: string,
+    page: string,
+    page_size: string,
     order_by: string
 ) => {
     return new Promise((resolve, reject) => {
-        api.get(URLS.products, {params: {supplier__company_name, unit_price, search, order_by}})
+        api.get(URLS.products, {params: {supplier__company_name, unit_price, search, page, page_size, order_by}})
         .then((response: AxiosResponse) => {
             if(response.status === 200) {
-                resolve(response.data.results)
+                resolve(response.data)
             } else {
                 reject()
             }

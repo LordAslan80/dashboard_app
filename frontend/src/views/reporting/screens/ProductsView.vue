@@ -97,6 +97,9 @@
                 </tr>
             </tbody>
         </table>
+
+        <pagination v-if="count > 0" :current-page="currentPage" :per-page="perPage" :count="count"
+            :number-of-pages="numberOfPages" @update-page="updatePage" @update-table-size="updateTableSize"/>
     </div>
 </template>
 
@@ -117,6 +120,7 @@ import router from '@/router';
 import { loadSuppliers } from '@/api/common/suppliers';
 import { extractValues } from '@/composables/util';
 import { loadProductPrices } from '@/api/common/productPrices';
+import Pagination from '@/components/common/Pagination.vue';
 
 export default defineComponent ({
     components: {
@@ -126,7 +130,8 @@ export default defineComponent ({
         Sorting_Icon,
         CreateProductModal,
         EditProductModal,
-        ConfirmDeleteModal
+        ConfirmDeleteModal,
+        Pagination
     },
 
     setup() {
@@ -160,6 +165,30 @@ export default defineComponent ({
         const productIdToDelete = ref()
 
         const orderBy = ref('id')
+
+        const currentPage = ref(1)
+        const perPage = ref(5)
+
+        const numberOfPages = computed(() => {
+            let data = store.getters["paginationManagement/getNumberOfPages"]
+            return Number(data)
+        })
+
+        const count = computed(() => {
+            let data = store.getters["paginationManagement/getCount"]
+            return Number(data)
+        })
+
+        const updatePage = (page: any) => {
+            currentPage.value = page
+            updateList()
+        }
+
+        const updateTableSize = (pageSize: any) => {
+            perPage.value = pageSize.value
+            currentPage.value = 1
+            updateList()
+        }
 
         const setDataForDetailsPage = (item: IProduct) => {
             return store.dispatch("productManagement/setProductDetails", {
@@ -205,14 +234,16 @@ export default defineComponent ({
         }
 
         const filterList = () => {
+            currentPage.value = 1
             updateList()
         }
 
         const refreshList = () => {
-            filteredSupplier.value = ""
-            filteredPrice.value = ""
-            search.value = ""
-            updateList()
+            window.location.reload()
+            // filteredSupplier.value = ""
+            // filteredPrice.value = ""
+            // search.value = ""
+            // updateList()
         }
 
         const getSuppliers = async () => {
@@ -225,14 +256,22 @@ export default defineComponent ({
         }
 
         const updateList = async () => {
-            return Promise.allSettled([
+            let data: any = await Promise.allSettled([
                 store.dispatch("productManagement/setProducts", {
                     filteredSupplier: filteredSupplier.value,
                     filteredPrice: filteredPrice.value,
                     search: search.value,
+                    per_page: perPage.value,
+                    page: currentPage.value,
                     order_by: orderBy.value
                 })
             ])
+
+            let paginationInfo = data[0].value
+            store.dispatch("paginationManagement/setNumberOfPages", paginationInfo.number_of_pages)
+            store.dispatch("paginationManagement/setCount", paginationInfo.count)
+
+            return data
         }
 
         const handleEdit = (editedProduct: any) => {
@@ -283,6 +322,10 @@ export default defineComponent ({
             prices,
             search,
             orderBy,
+            currentPage,
+            perPage,
+            numberOfPages,
+            count,
             openCreateModal,
             openEditModal,
             openDeleteModal,
@@ -292,7 +335,9 @@ export default defineComponent ({
             handleDelete,
             filterList,
             refreshList,
-            setSortingBy
+            setSortingBy,
+            updatePage,
+            updateTableSize
         }
     }
 })
