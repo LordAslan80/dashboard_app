@@ -134,3 +134,15 @@ table {
         background-color: $color-refresh;
     }
 }
+
+.sorting-icon {
+    vertical-align: -5px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.active-sorting {
+    border-radius: 50px;
+    background-color: $color-1;
+    padding: 2px 2px 2px 4px;
+}
