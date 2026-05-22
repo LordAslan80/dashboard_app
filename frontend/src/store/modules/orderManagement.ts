@@ -44,7 +44,8 @@ export default {
                 payload.filteredCity,
                 payload.search,
                 payload.page,
-                payload.per_page
+                payload.per_page,
+                payload.order_by
             )
             commit("SET_ORDERS", data.results)
             commit("SET_COUNT", data.count)

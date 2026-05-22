@@ -51,8 +51,14 @@
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Order date</th>
+                    <th @click="setSortingBy(ORDER_BY_ID)">
+                        ID
+                        <Sorting_Icon :class="orderBy===ORDER_BY_ID ? 'active-sorting' : ''" class="sorting-icon"/>
+                    </th>
+                    <th @click="setSortingBy(ORDER_BY_DATE)">
+                        Order date
+                        <Sorting_Icon :class="orderBy===ORDER_BY_DATE ? 'active-sorting' : ''" class="sorting-icon"/>
+                    </th>
                     <th>Customer name</th>
                     <th>Product name</th>
                     <th>Required date</th>
@@ -104,6 +110,7 @@ import ConfirmDeleteModal from '../modals/ConfirmDeleteModal.vue';
 import Edit_Icon from '@/assets/icons/Edit_Icon.vue';
 import Trash_Icon from '@/assets/icons/Trash_Icon.vue';
 import Plus_Icon from '@/assets/icons/Plus_Icon.vue';
+import Sorting_Icon from '@/assets/icons/Sorting_Icon.vue';
 import { useStore } from 'vuex';
 import router from '@/router';
 import { IOrder } from '@/models/IOrder';
@@ -119,10 +126,14 @@ export default defineComponent ({
         Edit_Icon,
         Trash_Icon,
         Plus_Icon,
+        Sorting_Icon,
         Pagination
     },
 
     setup() {
+        const ORDER_BY_ID = "id"
+        const ORDER_BY_DATE = "order_date"
+
         const store = useStore()
 
         const orders = computed(() => {
@@ -146,6 +157,8 @@ export default defineComponent ({
         const orderIdToUpdate = ref('')
         const orderToUpdate = ref()
         const orderIdToDelete = ref()
+
+        const orderBy = ref('id')
 
         const currentPage = ref(1)
         const perPage = ref(5)
@@ -211,6 +224,11 @@ export default defineComponent ({
             isConfirmDeleteModalVisible.value = false
         }
 
+        const setSortingBy = (ordering: string) => {
+            orderBy.value = ordering
+            updateList()
+        }
+
         const filterList = () => {
             currentPage.value = 1
             updateList()
@@ -241,7 +259,8 @@ export default defineComponent ({
                     filteredCountry: filteredCountry.value,
                     search: search.value,
                     per_page: perPage.value,
-                    page: currentPage.value
+                    page: currentPage.value,
+                    order_by: orderBy.value
                 })
             ])
         }
@@ -278,6 +297,8 @@ export default defineComponent ({
         })
 
         return {
+            ORDER_BY_ID,
+            ORDER_BY_DATE,
             orders,
             isCreateModalVisible,
             isEditModalVisible,
@@ -293,6 +314,7 @@ export default defineComponent ({
             perPage,
             numberOfPages,
             count,
+            orderBy,
             openEditModal,
             handleEdit,
             handleDelete,
@@ -304,7 +326,8 @@ export default defineComponent ({
             filterList,
             refreshList,
             updatePage,
-            updateTableSize
+            updateTableSize,
+            setSortingBy
         }
     }
 })
