@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     # Third-Party apps
     "rest_framework",
     "django_filters",
+    "axes",
     # Local apps
     "reporting.apps.ReportingConfig",
 ]
@@ -58,6 +59,12 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "axes.middleware.AxesMiddleware",
+]
+
+AUTHENTICATION_BACKENDS = [
+    "axes.backends.AxesBackend",
+    "django.contrib.auth.backends.ModelBackend",
 ]
 
 REST_FRAMEWORK = {
@@ -104,6 +111,11 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+
+AXES_FAILURE_LIMIT = 5
+AXES_ONLY_USER_FAILURES = True
+AXES_RESET_ON_SUCCESS = True
 
 
 # Password validation
