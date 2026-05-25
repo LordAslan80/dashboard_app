@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "axes",
     # Local apps
     "reporting.apps.ReportingConfig",
+    "users.apps.UsersConfig",
 ]
 
 MIDDLEWARE = [
@@ -75,6 +76,8 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "reporting.pagination.PageNumberSizePagination",
     "PAGE_SIZE": 10,
 }
+
+AUTH_USER_MODEL = "users.user"
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=12),
