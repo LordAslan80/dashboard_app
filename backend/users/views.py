@@ -30,13 +30,13 @@ class NewUserView(APIView):
             is_staff=data["is_staff"],
             is_active=True,
             required_password_change=True,
-            password_change_date=timezone.now,
+            password_change_date=timezone.now(),
         )
         user.set_password(data["passwd"])
 
         status = 201
         try:
-            status = user.save()
+            user.save()
         except Exception:
             error_message = User._meta.get_field("username").error_messages["unique"]
             status = 406
