@@ -1,4 +1,4 @@
-from datetime import timezone
+from django.utils import timezone
 from django.contrib.auth.signals import user_logged_in
 from rest_framework import exceptions
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
