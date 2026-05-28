@@ -13,6 +13,14 @@ export const save = (key: string, update: object) => {
     })
 }
 
+export const remove = (key: any) => {
+    new Promise((resolve: Function): void => {
+        localStorage.removeItem(key)
+        unset(key)
+        resolve()
+    })
+}
+
 export const set = (key: string, update: any) => {
     // @ts-ignore
     store[key] = {...store[key], ...update}
