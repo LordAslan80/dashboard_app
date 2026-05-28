@@ -96,11 +96,14 @@ export default defineComponent ({
                     color: gray;
                     width: 100%;
                     padding: 16px;
-                    margin-bottom: 24px
                 }
             }
-
+            
             @include flex-v;
+            
+            @include not-last-child {
+                margin-bottom: 24px
+            }
 
             >.button {
                 padding: 16px 24px;
