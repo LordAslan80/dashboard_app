@@ -20,6 +20,7 @@
 import { defineComponent } from 'vue';
 import { authenticate } from '@/api/admin/users';
 import { ILoginCredentials } from '@/models/ILoginCredentials';
+import { save as saveToStore } from '@/localStorage';
 
 export default defineComponent ({
     components: {
@@ -38,6 +39,12 @@ export default defineComponent ({
                 console.warn("error logging", response)
             } else if (response !== undefined && response.status === 200) {
                 console.info("login seccessfull", response.data)
+                saveToStore("logged", {
+                    username: response.data.username,
+                    isAdmin: response.data.is_admin,
+                    accessToken: response.data.access_token,
+                    requiresReset: response.data.requires_reset
+                })
             }
         }
 
