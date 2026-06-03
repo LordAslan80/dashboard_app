@@ -1,5 +1,6 @@
 import { reactive } from "vue"
 import { ILocalStorage } from "@/models/ILocalStorage"
+import dlv from 'dlv'
 
 const store = reactive<ILocalStorage>({
     logged: null
@@ -29,4 +30,18 @@ export const set = (key: string, update: any) => {
 export const unset = (key: string) => {
     // @ts-ignore
     store[key] = null
+}
+
+export const get = (path: string) => dlv(store, path)
+
+export const load = (key: string) => {
+    new Promise((resolve) => {
+        try {
+            const value = JSON.parse(localStorage.getItem(key)!)[key]
+            set(key, value)
+            resolve(get(key))
+        } catch (error) {
+            resolve(get(key))
+        }
+    })
 }
