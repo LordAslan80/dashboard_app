@@ -1,15 +1,24 @@
 <template>
-  <!-- <router-view /> -->
-   <login-view/>
+  <router-view v-if="logged"/>
+   <login-view v-else/>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 import LoginView from './views/user/LoginView.vue';
+import { get as getFromStore, load as loadFromStore } from './localStorage';
 
 export default defineComponent({
   components: {
     LoginView
+  },
+  setup() {
+    const logged = computed(() => getFromStore('logged'))
+    loadFromStore('logged')
+
+    return {
+      logged
+    }
   }
 })
 </script>
