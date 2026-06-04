@@ -6,6 +6,7 @@ import DashboardView from '@/views/DashboardView.vue'
 import CustomersView from '@/views/relations/screens/CustomersView.vue'
 import OrderDetails from '@/views/reporting/details/OrderDetails.vue'
 import ProductDetails from '@/views/reporting/details/ProductDetails.vue'
+import AdminView from '@/views/administration/AdminView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -49,6 +50,12 @@ const routes: Array<RouteRecordRaw> = [
         name: 'customers',
         component: CustomersView,
         meta: { screen: 'customers' }
+      },
+      {
+        path: '/administration',
+        name: 'administration',
+        component: AdminView,
+        meta: { screen: 'administration' }
       }
     ]
   },
