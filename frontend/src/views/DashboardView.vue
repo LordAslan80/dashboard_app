@@ -30,6 +30,16 @@
                             <router-link :to="{name: 'customers'}" class="each">Customers</router-link>
                         </div>
                     </section>
+                    <section :class="{'is-toggled': toggledViews.includes('administration')}">
+                        <a href="#" @click.prevent="toggleViews('administration')">
+                            <Config_Icon class="nav_icon" :color="colorKey === 'administration' ? activeColor : baseColor"/>
+                            <span>Administration</span>
+                            <MenuToggle_Icon class="menuToggle"/>
+                        </a>
+                        <div class="subs">
+                            <router-link :to="{name: 'administration'}" class="each">Admin area</router-link>
+                        </div>
+                    </section>
                 </section>
             </nav>
         </aside>
@@ -50,12 +60,14 @@ import router from '@/router';
 import Home_Icon from '@/assets/icons/Home_Icon.vue';
 import Customers_Icon from '@/assets/icons/Customers_Icon.vue';
 import MenuToggle_Icon from '@/assets/icons/MenuToggle_Icon.vue';
+import Config_Icon from '@/assets/icons/Config_Icon.vue';
 
 export default defineComponent ({
     components: {
         Home_Icon,
         Customers_Icon,
-        MenuToggle_Icon
+        MenuToggle_Icon,
+        Config_Icon
     },
 
     setup() {
