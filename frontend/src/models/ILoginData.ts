@@ -1,6 +1,6 @@
 export interface ILoginData {
-    access_token: string
-    refresh_token: string
+    accessToken: string
+    refreshToken: string
     isAdmin: boolean
     requiresReset: boolean
     username: string
