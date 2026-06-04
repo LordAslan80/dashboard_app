@@ -1,4 +1,4 @@
-import { reactive } from "vue"
+import { reactive, watch } from "vue"
 import { ILocalStorage } from "@/models/ILocalStorage"
 import dlv from 'dlv'
 
@@ -44,4 +44,12 @@ export const load = (key: string) => {
             resolve(get(key))
         }
     })
+}
+
+export const authorize = (key: string, callback: Function) => {
+    watch(
+        // @ts-ignore
+        () => store[key],
+        (keyValue) => callback(keyValue)
+    )
 }

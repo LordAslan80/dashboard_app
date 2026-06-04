@@ -1,4 +1,6 @@
 import axios, {Axios} from "axios";
+import { authorize } from "@/localStorage";
+import { ILoginData } from "@/models/ILoginData";
 
 
 axios.defaults.headers.common["Content-Type"] = "application/json"
@@ -8,7 +10,12 @@ const axiosInstance = axios.create()
 const baseUrl = process.env.VUE_APP_BASE_URL
 
 const api = (axios: Axios) => {
-    axios.defaults.baseURL = baseUrl + "/api"
+    authorize("logged", (loginData: ILoginData) => {
+        if (loginData) {
+            axios.defaults.headers.common["Authorization"] = `Bearer ${loginData.accessToken}`
+            axios.defaults.baseURL = `${baseUrl}/api`
+        }
+    })
 
     return {
         get: <T>(url: string, config: any) => axios.get<T>(url, {...config}),
