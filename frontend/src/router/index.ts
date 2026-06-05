@@ -8,6 +8,7 @@ import OrderDetails from '@/views/reporting/details/OrderDetails.vue'
 import ProductDetails from '@/views/reporting/details/ProductDetails.vue'
 import AdminView from '@/views/administration/AdminView.vue'
 import UserSettingsView from '@/views/administration/UserSettingsView.vue'
+import { get as getFromStore } from '@/localStorage'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -56,7 +57,11 @@ const routes: Array<RouteRecordRaw> = [
         path: '/administration',
         name: 'administration',
         component: AdminView,
-        meta: { screen: 'administration' }
+        meta: { screen: 'administration' },
+        beforeEnter: (to: any, from: any, next: any) => {
+          const isAdmin = getFromStore("logged.isAdmin")
+          if (isAdmin) next()
+        }
       },
       {
         path: '/user-settings',

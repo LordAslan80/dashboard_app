@@ -37,7 +37,7 @@
                             <MenuToggle_Icon class="menuToggle"/>
                         </a>
                         <div class="subs">
-                            <router-link :to="{name: 'administration'}" class="each">Admin area</router-link>
+                            <router-link v-if="isAdmin" :to="{name: 'administration'}" class="each">Admin area</router-link>
                             <router-link :to="{name: 'user-settings'}" class="each">User settings</router-link>
                         </div>
                     </section>
@@ -53,9 +53,10 @@
 
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import router from '@/router';
+import { get as getFromStore } from '@/localStorage';
 
 // Icons
 import Home_Icon from '@/assets/icons/Home_Icon.vue';
@@ -73,6 +74,7 @@ export default defineComponent ({
 
     setup() {
         const route = useRoute()
+        const isAdmin = computed(() => getFromStore("logged.isAdmin"))
         const activeColor = ref('#0fadd4')
         const baseColor = ref('white')
         const colorKey = ref('')
@@ -90,6 +92,7 @@ export default defineComponent ({
         }
 
         return {
+            isAdmin,
             activeColor,
             baseColor,
             colorKey,
