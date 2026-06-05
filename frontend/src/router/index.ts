@@ -7,6 +7,7 @@ import CustomersView from '@/views/relations/screens/CustomersView.vue'
 import OrderDetails from '@/views/reporting/details/OrderDetails.vue'
 import ProductDetails from '@/views/reporting/details/ProductDetails.vue'
 import AdminView from '@/views/administration/AdminView.vue'
+import UserSettingsView from '@/views/administration/UserSettingsView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -56,6 +57,12 @@ const routes: Array<RouteRecordRaw> = [
         name: 'administration',
         component: AdminView,
         meta: { screen: 'administration' }
+      },
+      {
+        path: '/user-settings',
+        name: 'user-settings',
+        component: UserSettingsView,
+        meta: { screen: 'user-settings' }
       }
     ]
   },
