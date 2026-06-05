@@ -4,34 +4,43 @@
             <p class="login-title">Login</p>
             <div class="input">
                 <label for="login_username">Username</label>
-                <input type="text" placeholder="Username"/>
+                <input type="text" placeholder="Username" v-model="input.username"/>
             </div>
             <div class="input">
                 <label for="login_password">Password</label>
-                <input type="password" placeholder="Password"/>
+                <input type="password" placeholder="Password" v-model="input.password"/>
             </div>
-            <button class="button is-primary">Login</button>
+            <button class="button is-primary" :disabled="!isValid">Login</button>
         </form>
     </div>
 </template>
 
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import { authenticate } from '@/api/admin/users';
 import { ILoginCredentials } from '@/models/ILoginCredentials';
 import { save as saveToStore } from '@/localStorage';
+import router from '@/router';
 
 export default defineComponent ({
     components: {
     },
 
     setup() {
+        const input = ref({
+            username: "",
+            password: ""
+        })
+
+        const isValid = computed(() => {
+            return Object.values(input.value).every(Boolean)
+        })
+
         const login = async () => {
-            const body: ILoginCredentials = {
-                username: "admin",
-                password: "1234"
-            }
+            const {username, password} = input.value
+
+            const body: ILoginCredentials = {username, password}
 
             let response = await authenticate(body)
 
@@ -45,10 +54,13 @@ export default defineComponent ({
                     accessToken: response.data.access,
                     requiresReset: response.data.requires_reset
                 })
+                router.push({name: "orders"})
             }
         }
 
         return {
+            input,
+            isValid,
             login
         }
     },
@@ -115,6 +127,17 @@ export default defineComponent ({
             >.button {
                 padding: 16px 24px;
                 border-radius: 8px;
+            }
+
+            button[disabled] {
+                cursor: auto;
+                opacity: .6;
+                border: none;
+
+                :hover {
+                    background: transparent;
+                    color: transparent;
+                }
             }
         }
     }
