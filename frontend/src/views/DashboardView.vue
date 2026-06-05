@@ -42,6 +42,12 @@
                         </div>
                     </section>
                 </section>
+                <section class="nav-section bottom-nav">
+                    <a @click.prevent="logout">
+                        <Logout_Icon class="nav-icon"/>
+                        <span>Logout {{ loggedUser[0].toUpperCase() + loggedUser.slice(1) }}</span>
+                    </a>
+                </section>
             </nav>
         </aside>
 
@@ -56,25 +62,28 @@
 import { computed, defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import router from '@/router';
-import { get as getFromStore } from '@/localStorage';
+import { get as getFromStore, remove as removeFromStore } from '@/localStorage';
 
 // Icons
 import Home_Icon from '@/assets/icons/Home_Icon.vue';
 import Customers_Icon from '@/assets/icons/Customers_Icon.vue';
 import MenuToggle_Icon from '@/assets/icons/MenuToggle_Icon.vue';
 import Config_Icon from '@/assets/icons/Config_Icon.vue';
+import Logout_Icon from '@/assets/icons/Logout_Icon.vue';
 
 export default defineComponent ({
     components: {
         Home_Icon,
         Customers_Icon,
         MenuToggle_Icon,
-        Config_Icon
+        Config_Icon,
+        Logout_Icon
     },
 
     setup() {
         const route = useRoute()
         const isAdmin = computed(() => getFromStore("logged.isAdmin"))
+        const loggedUser = computed(() => getFromStore("logged.username") || "Not logged")
         const activeColor = ref('#0fadd4')
         const baseColor = ref('white')
         const colorKey = ref('')
@@ -90,6 +99,10 @@ export default defineComponent ({
                 colorKey.value = key
             }
         }
+        const logout = () => {
+            removeFromStore("logged")
+            router.push({ name: "dashboard" })
+        }
 
         return {
             isAdmin,
@@ -98,6 +111,8 @@ export default defineComponent ({
             colorKey,
             route,
             toggledViews,
+            loggedUser,
+            logout,
             toggleViews
         }
     },
