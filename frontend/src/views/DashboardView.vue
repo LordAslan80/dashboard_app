@@ -38,6 +38,7 @@
                         </a>
                         <div class="subs">
                             <router-link :to="{name: 'administration'}" class="each">Admin area</router-link>
+                            <router-link :to="{name: 'user-settings'}" class="each">User settings</router-link>
                         </div>
                     </section>
                 </section>
