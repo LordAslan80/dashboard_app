@@ -52,11 +52,12 @@ class DeleteUserView(APIView):
         return Response({}, status=200)
 
 
-class DeactivateUserView(APIView):
+class UpdateUserStatusView(APIView):
     permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
 
     def post(self, request):
         user = User.objects.get(username=request.data["username"])
-        user.is_active = False
+        user.is_active = False if user.is_active == True else True
+        message = "reactivated" if user.is_active == True else "deactivated"
         user.save()
-        return Response({"User deactivated"}, status=status.HTTP_200_OK)
+        return Response({f"User {message}"}, status=status.HTTP_200_OK)
