@@ -61,3 +61,30 @@ class UpdateUserStatusView(APIView):
         message = "reactivated" if user.is_active == True else "deactivated"
         user.save()
         return Response({f"User {message}"}, status=status.HTTP_200_OK)
+
+
+class UpdateUserView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        for item in request.data:
+            if item in ["username", "first_name", "last_name", "email"]:
+                if self.validate_requested_field(request, item):
+                    setattr(request.user, item, request.data[item])
+        try:
+            request.user.save()
+        except Exception:
+            error_message = User._meta.get_field("username").error_messages["unique"]
+            return Response(
+                {"error": error_message}, status=status.HTTP_406_NOT_ACCEPTABLE
+            )
+        return Response({"User data updated"}, status=status.HTTP_200_OK)
+
+    def validate_requested_field(self, request, field):
+        return (
+            True
+            if field in request.data
+            and request.data[field]
+            and request.data[field] != ""
+            else False
+        )

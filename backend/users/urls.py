@@ -1,6 +1,12 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import UserView, NewUserView, DeleteUserView, UpdateUserStatusView
+from .views import (
+    UserView,
+    NewUserView,
+    DeleteUserView,
+    UpdateUserStatusView,
+    UpdateUserView,
+)
 from .custom_jwt_claims import CustomTokenObtainPairView
 
 router = DefaultRouter()
@@ -13,5 +19,6 @@ urlpatterns = [
     path(
         "users/update-status", UpdateUserStatusView.as_view(), name="update_user_status"
     ),
+    path("users/update", UpdateUserView.as_view(), name="update_user"),
     path("token/", CustomTokenObtainPairView.as_view(), name="token_obtain_pair"),
 ]
