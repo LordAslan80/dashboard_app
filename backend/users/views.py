@@ -42,3 +42,11 @@ class NewUserView(APIView):
             status = 406
             return Response({"error": error_message}, status=status)
         return Response({}, status=status)
+
+
+class DeleteUserView(APIView):
+    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+
+    def delete(self, request):
+        User.objects.get(id=request.data["user_id"]).delete()
+        return Response({}, status=200)
