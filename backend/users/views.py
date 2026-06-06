@@ -1,6 +1,6 @@
 import logging
 from django.utils import timezone
-from rest_framework import permissions
+from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -50,3 +50,13 @@ class DeleteUserView(APIView):
     def delete(self, request):
         User.objects.get(id=request.data["user_id"]).delete()
         return Response({}, status=200)
+
+
+class DeactivateUserView(APIView):
+    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+
+    def post(self, request):
+        user = User.objects.get(username=request.data["username"])
+        user.is_active = False
+        user.save()
+        return Response({"User deactivated"}, status=status.HTTP_200_OK)
