@@ -128,3 +128,26 @@ class AdminResetUserPasswordView(APIView):
         user.save()
 
         return Response({"response": "Success"}, status=status.HTTP_200_OK)
+
+
+class ResetUserPasswordView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        try:
+            if request.data["new_passwd"] != request.data["confirm_passwd"]:
+                raise ValidationError(
+                    ("Password should match."), code="Password should match."
+                )
+
+            validate_password(request.data["new_passwd"], request.user)
+
+        except ValidationError as e:
+            return Response({"errors": e.error_list}, status=status.HTTP_403_FORBIDDEN)
+
+        request.user.required_password_change = False
+        request.user.password_change_date = timezone.now()
+        request.user.set_password(request.data["new_passwd"])
+        request.user.save()
+
+        return Response({"response": "Success"}, status=status.HTTP_200_OK)
