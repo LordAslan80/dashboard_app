@@ -1,5 +1,6 @@
 import logging
 from django.core.exceptions import ValidationError
+from django.contrib.auth.password_validation import validate_password
 from django.utils import timezone
 from rest_framework import permissions, status
 from rest_framework.response import Response
@@ -23,27 +24,29 @@ class NewUserView(APIView):
     permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
 
     def post(self, request, format=None):
-        data = request.data
         user = User(
-            username=data["username"],
-            first_name=data["firstName"],
-            last_name=data["lastName"],
-            email=data["email"],
-            is_staff=data["is_staff"],
+            username=request.data["username"],
+            first_name=request.data["firstName"],
+            last_name=request.data["lastName"],
+            email=request.data["email"],
+            is_staff=request.data["is_staff"],
             is_active=True,
             required_password_change=True,
             password_change_date=timezone.now(),
         )
-        user.set_password(data["passwd"])
+        user.set_password(request.data["passwd"])
 
-        status = 201
         try:
+            validate_password(request.data["passwd"], user)
             user.save()
+        except ValidationError as e:
+            return Response(e, status=status.HTTP_400_BAD_REQUEST)
         except Exception:
             error_message = User._meta.get_field("username").error_messages["unique"]
-            status = 406
-            return Response({"error": error_message}, status=status)
-        return Response({}, status=status)
+            return Response(
+                {"error": error_message}, status=status.HTTP_406_NOT_ACCEPTABLE
+            )
+        return Response({}, status=status.HTTP_201_CREATED)
 
 
 class DeleteUserView(APIView):
