@@ -107,3 +107,24 @@ class ResetLoginAttemptsView(APIView):
             )
         reset(username=request.data["blocked_user"])
         return Response({"User unblocked"}, status=status.HTTP_200_OK)
+
+
+class AdminResetUserPasswordView(APIView):
+    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+
+    def post(self, request):
+        if not request.user.is_staff:
+            return Response(
+                {"response": "User is not an admin!"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        validate_password(request.data["new_passwd"], request.data["target_user"])
+
+        user = User.objects.get(username=request.data["target_user"])
+        user.required_password_change = False
+        user.password_change_date = timezone.now()
+        user.set_password(request.data["new_passwd"])
+        user.save()
+
+        return Response({"response": "Success"}, status=status.HTTP_200_OK)

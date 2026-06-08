@@ -7,6 +7,7 @@ from .views import (
     UpdateUserStatusView,
     UpdateUserView,
     ResetLoginAttemptsView,
+    AdminResetUserPasswordView,
 )
 from .custom_jwt_claims import CustomTokenObtainPairView
 
@@ -25,6 +26,11 @@ urlpatterns = [
         "users/admin-reset-login-attempts",
         ResetLoginAttemptsView.as_view(),
         name="unblock",
+    ),
+    path(
+        "users/admin-reset-password",
+        AdminResetUserPasswordView.as_view(),
+        name="reset-password",
     ),
     path("token/", CustomTokenObtainPairView.as_view(), name="token_obtain_pair"),
 ]
