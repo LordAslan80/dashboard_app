@@ -1,9 +1,11 @@
 import logging
+from django.core.exceptions import ValidationError
 from django.utils import timezone
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
+from axes.utils import reset
 from .models import User
 from .serializers import UserSerializer
 
@@ -88,3 +90,17 @@ class UpdateUserView(APIView):
             and request.data[field] != ""
             else False
         )
+
+
+class ResetLoginAttemptsView(APIView):
+    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+
+    def post(self, request):
+        if "blocked_user" not in request.data.keys():
+            raise ValidationError(detail={"blocked_user": "This field is required."})
+        if not User.objects.filter(username=request.data["blocked_user"]).exists():
+            raise ValidationError(
+                ("Username does not exists."), code="Username does not exists."
+            )
+        reset(username=request.data["blocked_user"])
+        return Response({"User unblocked"}, status=status.HTTP_200_OK)
