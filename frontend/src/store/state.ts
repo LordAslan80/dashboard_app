@@ -11,7 +11,8 @@ const state = (): GlobalState => {
         pages: 0,
         pageNumber: 1,
         count: 0,
-        numberOfPages: 0
+        numberOfPages: 0,
+        users: []
     }
 }
 
