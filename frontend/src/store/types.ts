@@ -1,5 +1,6 @@
 import { IOrder } from "@/models/IOrder";
 import { IProduct } from "@/models/IProduct";
+import { IUser } from "@/models/IUser";
 
 export interface GlobalState {
     orders: any[],
@@ -9,5 +10,6 @@ export interface GlobalState {
     pages: number,
     pageNumber: number,
     count: number,
-    numberOfPages: number
+    numberOfPages: number,
+    users: IUser[]
 }
