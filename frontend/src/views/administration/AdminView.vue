@@ -1,4 +1,14 @@
 <template>
+    <tabs>
+        <tab title="Add new user">
+            <add-user-action/>
+        </tab>
+        
+        <tab title="Delete a user">
+            <delete-user-action/>
+        </tab>
+    </tabs>
+
     <div>
         <users-overview class="users"/>
     </div>
@@ -8,10 +18,18 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import UsersOverview from './screens/UsersOverview.vue';
+import Tab from '@/components/common/Tab.vue';
+import Tabs from '@/components/common/Tabs.vue';
+import AddUserAction from './actions/AddUserAction.vue';
+import DeleteUserAction from './actions/DeleteUserAction.vue';
 
 export default defineComponent ({
     components: {
-        UsersOverview
+        UsersOverview,
+        Tab,
+        Tabs,
+        AddUserAction,
+        DeleteUserAction
     },
 
     setup() {
