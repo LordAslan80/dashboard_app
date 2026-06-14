@@ -11,4 +11,5 @@ export interface IUser {
     password_change_date: Date
     required_password_change: boolean
     deletable?: boolean
+    passwd?: string
 }
