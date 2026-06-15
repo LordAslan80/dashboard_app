@@ -7,6 +7,10 @@
         <tab title="Delete a user">
             <delete-user-action/>
         </tab>
+        
+        <tab title="Unblock a user">
+            <unblock-user-action/>
+        </tab>
     </tabs>
 
     <div>
@@ -22,6 +26,7 @@ import Tab from '@/components/common/Tab.vue';
 import Tabs from '@/components/common/Tabs.vue';
 import AddUserAction from './actions/AddUserAction.vue';
 import DeleteUserAction from './actions/DeleteUserAction.vue';
+import UnblockUserAction from './actions/UnblockUserAction.vue';
 import { useStore } from 'vuex';
 
 export default defineComponent ({
@@ -30,7 +35,8 @@ export default defineComponent ({
         Tab,
         Tabs,
         AddUserAction,
-        DeleteUserAction
+        DeleteUserAction,
+        UnblockUserAction
     },
 
     setup() {
