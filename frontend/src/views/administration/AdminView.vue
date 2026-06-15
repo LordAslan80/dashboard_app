@@ -16,12 +16,13 @@
 
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted } from 'vue';
 import UsersOverview from './screens/UsersOverview.vue';
 import Tab from '@/components/common/Tab.vue';
 import Tabs from '@/components/common/Tabs.vue';
 import AddUserAction from './actions/AddUserAction.vue';
 import DeleteUserAction from './actions/DeleteUserAction.vue';
+import { useStore } from 'vuex';
 
 export default defineComponent ({
     components: {
@@ -33,6 +34,17 @@ export default defineComponent ({
     },
 
     setup() {
+        const store = useStore()
+
+        const updateList = async () => {
+            return Promise.allSettled([
+                store.dispatch("administrationManagement/setUsers")
+            ])
+        }
+
+        onMounted(() => {
+            updateList()
+        })
 
         return {
         }
@@ -42,12 +54,5 @@ export default defineComponent ({
 
 
 <style lang="scss">
-.users {
-    position: absolute;
-    height: 30%;
-    bottom: 20px;
-    width: 78%;
-    margin: .5rem .5rem 1rem;
-    overflow-x: scroll;
-}
+@import "@/styles/components/_administration.scss";
 </style>
