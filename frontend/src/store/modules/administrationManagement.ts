@@ -1,5 +1,5 @@
 import { Commit } from "vuex";
-import { addUser, deleteUser, getUsers } from "@/api/admin/admin";
+import { addUser, deleteUser, getUsers, unblockUser } from "@/api/admin/admin";
 import { IUser } from "@/models/IUser";
 import { GlobalState } from "../types";
 
@@ -22,6 +22,11 @@ export default {
             state.users = state.users.filter((user) => {
                 return user.id != Number(id)
             })
+        },
+        UNBLOCK_USER(state: GlobalState, selectedUsername: string) {
+            state.users[
+                state.users.findIndex((user) => user.username === selectedUsername)
+            ].is_blocked = false
         }
     },
     actions: {
@@ -48,6 +53,16 @@ export default {
             return deleteUser(String(payload.id))
             .then(() => {
                 commit("DELETE_USER", payload.id)
+                return true
+            })
+            .catch(() => {
+                return false
+            })
+        },
+        unblockUser({commit}: {commit: Commit}, payload: string) {
+            return unblockUser(payload)
+            .then(() => {
+                commit("UNBLOCK_USER", payload)
                 return true
             })
             .catch(() => {
