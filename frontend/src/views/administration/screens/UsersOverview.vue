@@ -48,16 +48,6 @@ export default defineComponent({
             return data
         })
 
-        const updateList = async () => {
-            return Promise.allSettled([
-                store.dispatch("administrationManagement/setUsers")
-            ])
-        }
-
-        onMounted(() => {
-            updateList()
-        })
-
         return {
             users,
             formatDate
