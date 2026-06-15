@@ -1,5 +1,5 @@
 import { Commit } from "vuex";
-import { addUser, getUsers } from "@/api/admin/admin";
+import { addUser, deleteUser, getUsers } from "@/api/admin/admin";
 import { IUser } from "@/models/IUser";
 import { GlobalState } from "../types";
 
@@ -17,6 +17,11 @@ export default {
             user.is_active = true
             user.passwd = ""
             state.users.push(user)
+        },
+        DELETE_USER(state: GlobalState, id: string) {
+            state.users = state.users.filter((user) => {
+                return user.id != Number(id)
+            })
         }
     },
     actions: {
@@ -33,6 +38,16 @@ export default {
             return addUser(user)
             .then(() => {
                 commit("ADD_USER", user)
+                return true
+            })
+            .catch(() => {
+                return false
+            })
+        },
+        deleteUser({commit}: any, payload: Partial<IUser>) {
+            return deleteUser(String(payload.id))
+            .then(() => {
+                commit("DELETE_USER", payload.id)
                 return true
             })
             .catch(() => {
