@@ -4,7 +4,8 @@ import { IUser } from "@/models/IUser";
 
 const URLS = {
     users: "users/",
-    add_user: "users/new"
+    add_user: "users/new",
+    unblock_user: "users/admin-reset-login-attempts"
 }
 
 export const getUsers = () => {
@@ -39,6 +40,16 @@ export const deleteUser = (id: string) => {
     return api
         .delete(`${URLS.users}${id}/`)
         .catch((error) => {
-            console.error("Error in New User: ", error)
+            console.error("Error in Delete User: ", error)
+        })
+}
+
+export const unblockUser = (username: string) => {
+    return api
+        .post(URLS.unblock_user, {
+            blocked_user: username
+        })
+        .catch((error) => {
+            console.error("Error in Unblock User: ", error)
         })
 }
