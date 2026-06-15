@@ -34,3 +34,11 @@ export const addUser = (body: Partial<IUser>) => {
             console.error("Error in New User: ", error)
         })
 }
+
+export const deleteUser = (id: string) => {
+    return api
+        .delete(`${URLS.users}${id}/`)
+        .catch((error) => {
+            console.error("Error in New User: ", error)
+        })
+}
