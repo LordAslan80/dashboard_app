@@ -12,6 +12,10 @@
             <unblock-user-action/>
         </tab>
         
+        <tab title="Update user status">
+            <update-user-status-action/>
+        </tab>
+        
         <tab title="Update a user password">
             <update-user-password-action/>
         </tab>
@@ -32,6 +36,7 @@ import AddUserAction from './actions/AddUserAction.vue';
 import DeleteUserAction from './actions/DeleteUserAction.vue';
 import UnblockUserAction from './actions/UnblockUserAction.vue';
 import UpdateUserPasswordAction from './actions/UpdateUserPasswordAction.vue';
+import UpdateUserStatusAction from './actions/UpdateUserStatusAction.vue';
 import { useStore } from 'vuex';
 
 export default defineComponent ({
@@ -42,7 +47,8 @@ export default defineComponent ({
         AddUserAction,
         DeleteUserAction,
         UnblockUserAction,
-        UpdateUserPasswordAction
+        UpdateUserPasswordAction,
+        UpdateUserStatusAction
     },
 
     setup() {
