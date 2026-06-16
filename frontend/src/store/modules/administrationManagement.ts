@@ -1,5 +1,5 @@
 import { Commit } from "vuex";
-import { addUser, deleteUser, getUsers, unblockUser } from "@/api/admin/admin";
+import { addUser, deleteUser, getUsers, unblockUser, updateUserStatus } from "@/api/admin/admin";
 import { IUser } from "@/models/IUser";
 import { GlobalState } from "../types";
 
@@ -27,7 +27,12 @@ export default {
             state.users[
                 state.users.findIndex((user) => user.username === selectedUsername)
             ].is_blocked = false
-        }
+        },
+        UPDATE_USER_STATUS(state: GlobalState, payload: any) {
+            state.users[
+                state.users.findIndex((user) => user.username === payload.username)
+            ].is_active = Boolean(payload.is_active)
+        },
     },
     actions: {
         setUsers({commit}: {commit: Commit}) {
@@ -68,7 +73,18 @@ export default {
             .catch(() => {
                 return false
             })
-        }
+        },
+        updateUserStatus({ commit }: { commit: Commit }, payload: Partial<IUser>) {
+            return updateUserStatus(payload)
+            .then(() => {
+                commit("UPDATE_USER_STATUS", payload)
+                return true
+            })
+            .catch((e: any) => {
+                console.log("updateUserStatus error ==> ", e)
+                return false
+            })
+        },
     },
     getters: {
         getUsers(state: GlobalState){
