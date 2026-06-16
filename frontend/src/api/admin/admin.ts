@@ -8,6 +8,7 @@ const URLS = {
     add_user: "users/new",
     unblock_user: "users/admin-reset-login-attempts",
     update_user_password: "users/admin-reset-password",
+    update_user_status: "users/update-status",
 }
 
 export const getUsers = () => {
@@ -63,6 +64,16 @@ export const updateUserPassword = (params: IPasswordUpdate) => {
             target_user: params.target_user
         })
         .catch((error) => {
-            console.error("Error in Unblock User: ", error)
+            console.error("Error in Update User Password: ", error)
+        })
+}
+
+export const updateUserStatus = (params: Partial<IUser>) => {  
+    return api
+        .post(URLS.update_user_status, {
+            username: params.username
+        })
+        .catch((error) => {
+            console.error("Error in Update User Status: ", error)
         })
 }
