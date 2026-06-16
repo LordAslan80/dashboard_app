@@ -1,11 +1,13 @@
 import { AxiosResponse, AxiosError } from "axios";
 import api from "../api";
 import { IUser } from "@/models/IUser";
+import { IPasswordUpdate } from "@/models/IPasswordUpdate";
 
 const URLS = {
     users: "users/",
     add_user: "users/new",
-    unblock_user: "users/admin-reset-login-attempts"
+    unblock_user: "users/admin-reset-login-attempts",
+    update_user_password: "users/admin-reset-password",
 }
 
 export const getUsers = () => {
@@ -48,6 +50,17 @@ export const unblockUser = (username: string) => {
     return api
         .post(URLS.unblock_user, {
             blocked_user: username
+        })
+        .catch((error) => {
+            console.error("Error in Unblock User: ", error)
+        })
+}
+
+export const updateUserPassword = (params: IPasswordUpdate) => {
+    return api
+        .post(URLS.update_user_password, {
+            new_passwd: params.new_passwd,
+            target_user: params.target_user
         })
         .catch((error) => {
             console.error("Error in Unblock User: ", error)
