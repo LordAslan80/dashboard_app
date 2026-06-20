@@ -12,6 +12,8 @@ const axiosInstance = axios.create()
 const baseUrl = process.env.VUE_APP_BASE_URL
 
 const api = (axios: Axios) => {
+    const controller = new AbortController()
+
     authorize("logged", (loginData: ILoginData) => {
         if (loginData) {
             axios.defaults.headers.common["Authorization"] = `Bearer ${loginData.accessToken}`
@@ -36,12 +38,18 @@ const api = (axios: Axios) => {
         }
     )
 
+    const cancelRequests = () => {
+        console.log("Cancelling API Requests")
+        controller.abort()
+    }
+
     return {
-        get: <T>(url: string, config: any) => axios.get<T>(url, {...config}),
+        get: <T>(url: string, config: any) => axios.get<T>(url, {signal: controller.signal, ...config}),
         post: <T>(url: string, body: object) => axios.post<T>(url, body),
         put: <T>(url: string, body: object) => axios.put<T>(url, body),
         patch: <T>(url: string, body: object) => axios.patch<T>(url, body),
-        delete: <T>(url: string) => axios.delete<T>(url)
+        delete: <T>(url: string) => axios.delete<T>(url),
+        cancel: () => cancelRequests()
     }
 }
 
