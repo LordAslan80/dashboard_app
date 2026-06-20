@@ -11,5 +11,6 @@ export interface GlobalState {
     pageNumber: number,
     count: number,
     numberOfPages: number,
-    users: IUser[]
+    users: IUser[],
+    user: IUser
 }
