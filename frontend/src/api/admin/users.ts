@@ -5,7 +5,8 @@ import { AxiosResponse, AxiosError } from "axios";
 
 const BASE_URL = "users/"
 const URLS = {
-    user_reset_password: `${BASE_URL}user-reset-password`
+    user_reset_password: `${BASE_URL}user-reset-password`,
+    user_deactivate: `${BASE_URL}deactivate`
 }
 
 export const authenticate = (creds: ILoginCredentials) => {
@@ -41,5 +42,13 @@ export const resetOwnPassword = (params: any) => {
         })
         .catch((error: AxiosError) => {
             if (error.response?.status === 403) return error.response
+        })
+}
+
+export const deactivate = (username: string) => {
+    return api
+        .post(URLS.user_deactivate, {username})
+        .catch((error) => {
+            console.log("caught error in deactivateOwnProfile: ", error)
         })
 }
