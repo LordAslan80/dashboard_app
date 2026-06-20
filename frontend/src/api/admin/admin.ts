@@ -24,6 +24,19 @@ export const getUsers = () => {
     })
 }
 
+export const getUser = (userId: string) => {
+    return new Promise((resolve, reject) => {
+        api
+            .get(`${URLS.users}${userId}/`, {})
+            .then((response: any) => {
+                response.status === 200 ? resolve(response.data) : reject()
+            })
+            .catch((error: AxiosError) => {
+                console.error("Error in Get User: ", error)
+            })
+    })
+}
+
 export const addUser = (body: Partial<IUser>) => {
     return api
         .post(URLS.add_user, {
