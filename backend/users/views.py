@@ -151,3 +151,14 @@ class ResetUserPasswordView(APIView):
         request.user.save()
 
         return Response({"response": "Success"}, status=status.HTTP_200_OK)
+
+
+class DeactivateUserView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        user = User.objects.get(username=request.data["username"])
+        user.is_active = False
+        user.save()
+
+        return Response({"user deactivated"}, status=status.HTTP_200_OK)
