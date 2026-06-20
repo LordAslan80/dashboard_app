@@ -1,6 +1,8 @@
-import axios, {Axios} from "axios";
+import axios, {Axios, AxiosError, AxiosResponse} from "axios";
 import { authorize } from "@/localStorage";
 import { ILoginData } from "@/models/ILoginData";
+import { remove as removeFromStore } from "@/localStorage";
+import router from "@/router";
 
 
 axios.defaults.headers.common["Content-Type"] = "application/json"
@@ -16,6 +18,23 @@ const api = (axios: Axios) => {
             axios.defaults.baseURL = `${baseUrl}/api`
         }
     })
+
+    axios.interceptors.response.use(
+        (response: AxiosResponse) => {
+            return response
+        },
+        (error: AxiosError) => {
+            if (error.message === "Network Error" && !error.response) {
+                console.log("Network Error: ", error)
+            }
+            if (error.response!.status === 401) {
+                console.log("401 Error: ", error)
+                removeFromStore("logged")
+                alert("Your session is going to be closed now please login again!")
+                router.push({name: "dashboard"})
+            }
+        }
+    )
 
     return {
         get: <T>(url: string, config: any) => axios.get<T>(url, {...config}),
