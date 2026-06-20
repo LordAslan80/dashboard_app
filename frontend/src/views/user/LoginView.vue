@@ -49,6 +49,7 @@ export default defineComponent ({
             } else if (response !== undefined && response.status === 200) {
                 console.info("login seccessfull", response.data)
                 saveToStore("logged", {
+                    id: response.data.id,
                     username: response.data.username,
                     isAdmin: response.data.is_admin,
                     accessToken: response.data.access,
