@@ -78,4 +78,12 @@ const router = createRouter({
   routes
 })
 
+router.beforeEach(async (to, from) => {
+  const isLogged = Boolean(getFromStore("logged"))
+  const requiresReset = getFromStore("logged.requiresReset")
+
+  if (!isLogged && to.name !== "dashboard") return {name: "dashboard"}
+  else if (requiresReset && to.name !== "user-settings") return {name: "user-settings"}
+})
+
 export default router
