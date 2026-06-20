@@ -12,7 +12,8 @@ const state = (): GlobalState => {
         pageNumber: 1,
         count: 0,
         numberOfPages: 0,
-        users: []
+        users: [],
+        user: null as any
     }
 }
 
