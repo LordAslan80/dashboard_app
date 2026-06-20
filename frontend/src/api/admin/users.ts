@@ -2,11 +2,13 @@ import axios from "axios";
 import { ILoginCredentials } from "@/models/ILoginCredentials";
 import api from "../api";
 import { AxiosResponse, AxiosError } from "axios";
+import { IUser } from "@/models/IUser";
 
 const BASE_URL = "users/"
 const URLS = {
     user_reset_password: `${BASE_URL}user-reset-password`,
-    user_deactivate: `${BASE_URL}deactivate`
+    user_deactivate: `${BASE_URL}deactivate`,
+    user_update_profile: `${BASE_URL}update`
 }
 
 export const authenticate = (creds: ILoginCredentials) => {
@@ -43,6 +45,24 @@ export const resetOwnPassword = (params: any) => {
         .catch((error: AxiosError) => {
             if (error.response?.status === 403) return error.response
         })
+}
+
+export const updateOwnProfile = (params: Partial<IUser>) => {
+    return new Promise((resolve, reject) => {
+        api
+            .post(URLS.user_update_profile, {
+                username: params.username,
+                email: params.email,
+                first_name: params.first_name,
+                last_name: params.last_name
+            })
+            .then((response: AxiosResponse) => {
+                response.status === 200 ? resolve(response.data) : reject(response.data)
+            })
+            .catch((error) => {
+                console.log("caught error in updateOwnProfile: ", error)
+            })
+    })
 }
 
 export const deactivate = (username: string) => {
