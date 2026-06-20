@@ -1,7 +1,8 @@
 import { Commit } from "vuex";
-import { addUser, deleteUser, getUsers, unblockUser, updateUserStatus } from "@/api/admin/admin";
+import { addUser, deleteUser, getUser, getUsers, unblockUser, updateUserStatus } from "@/api/admin/admin";
 import { IUser } from "@/models/IUser";
 import { GlobalState } from "../types";
+import { updateOwnProfile } from "@/api/admin/users";
 
 export default {
     namespaced: true,
@@ -11,6 +12,9 @@ export default {
     mutations: {
         SET_USERS(state: GlobalState, context: IUser[]) {
             state.users = context
+        },
+        SET_USER(state: GlobalState, context: IUser) {
+            state.user = context
         },
         ADD_USER(state: GlobalState, user: IUser) {
             user.is_blocked = false
@@ -33,12 +37,27 @@ export default {
                 state.users.findIndex((user) => user.username === payload.username)
             ].is_active = Boolean(payload.is_active)
         },
+        UPDATE_OWN_PROFILE(state: GlobalState, payload: any) {
+            state.user.username = payload.username
+            state.user.email = payload.email
+            state.user.first_name = payload.first_name
+            state.user.last_name = payload.last_name
+        },
     },
     actions: {
         setUsers({commit}: {commit: Commit}) {
             getUsers()
                 .then((data) => {
                     commit("SET_USERS", data)
+                })
+                .catch(() => {
+                    return false
+                })
+        },
+        setUser({commit}: {commit: Commit}, userId: string) {
+            getUser(userId)
+                .then((data) => {
+                    commit("SET_USER", data)
                 })
                 .catch(() => {
                     return false
@@ -85,10 +104,24 @@ export default {
                 return false
             })
         },
+        updateOwnProfile({ commit }: { commit: Commit }, payload: any) {
+            return updateOwnProfile(payload)
+            .then(() => {
+                commit("UPDATE_OWN_PROFILE", payload)
+                return true
+            })
+            .catch((e: any) => {
+                console.log("updateOwnProfile error ==> ", e)
+                return false
+            })
+        },
     },
     getters: {
         getUsers(state: GlobalState){
             return state.users
-        }
+        },
+        getUser(state: GlobalState){
+            return state.user
+        },
     }
 }
