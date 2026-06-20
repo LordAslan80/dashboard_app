@@ -1,5 +1,12 @@
 import axios from "axios";
 import { ILoginCredentials } from "@/models/ILoginCredentials";
+import api from "../api";
+import { AxiosResponse, AxiosError } from "axios";
+
+const BASE_URL = "users/"
+const URLS = {
+    user_reset_password: `${BASE_URL}user-reset-password`
+}
 
 export const authenticate = (creds: ILoginCredentials) => {
     axios.defaults.headers.common["Content-Type"] = "application/json"
@@ -18,5 +25,21 @@ export const authenticate = (creds: ILoginCredentials) => {
         .catch((error) => {
             if (error.message === "Network Error") return error.message
             return error.response
+        })
+}
+
+export const resetOwnPassword = (params: any) => {
+    return api
+        .post(URLS.user_reset_password, {
+            new_passwd: params.new_passwd,
+            confirm_passwd: params.confirm_passwd
+        })
+        .then((response: AxiosResponse) => {
+            return response.status === 200
+            ? Promise.resolve(response)
+            : Promise.reject()
+        })
+        .catch((error: AxiosError) => {
+            if (error.response?.status === 403) return error.response
         })
 }
