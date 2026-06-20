@@ -70,6 +70,7 @@ import Customers_Icon from '@/assets/icons/Customers_Icon.vue';
 import MenuToggle_Icon from '@/assets/icons/MenuToggle_Icon.vue';
 import Config_Icon from '@/assets/icons/Config_Icon.vue';
 import Logout_Icon from '@/assets/icons/Logout_Icon.vue';
+import api from '@/api/api';
 
 export default defineComponent ({
     components: {
@@ -100,6 +101,7 @@ export default defineComponent ({
             }
         }
         const logout = () => {
+            api.cancel()
             removeFromStore("logged")
             router.push({ name: "dashboard" })
         }
