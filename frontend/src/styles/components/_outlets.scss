@@ -1,0 +1,42 @@
+.outlets {
+    pointer-events: none;
+    z-index: 100;
+
+    > .notifications {
+        position: absolute;
+        right: 24px;
+        bottom: 24px;
+        min-width: 50%;
+        max-width: 70%;
+
+        @include flex-v;
+
+        justify-content: flex-end;
+        @include not-last-child {
+            margin-bottom: 16px;
+        }
+    }
+
+    .notification {
+        @include hold;
+        @include flex-h;
+        align-items: center;
+        pointer-events: all;
+        border-radius: 8px;
+        padding-right: 24px;
+
+        > header {
+            padding: 16px;
+            border-right: 1px solid $color-4;
+        }
+
+        > .body {
+            flex: 1;
+            padding: 8px 16px;
+        }
+
+        > .close {
+            padding: 8px 16px;
+        }
+    }
+}
