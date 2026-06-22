@@ -35,6 +35,7 @@
 import { defineComponent, ref } from 'vue';
 import { useStore } from 'vuex';
 import { load as loadFromStore, get as getFromStore, save as saveToStore } from '@/localStorage';
+import { showNotification } from '@/composables/outlets';
 
 export default defineComponent ({
     props: {
@@ -54,7 +55,7 @@ export default defineComponent ({
         const lastName = ref(props.user.last_name)
 
         const submitForm = async () => {
-            let status = await store.dispatch("administrationManagement/updateOwnProfile", {
+            let response = await store.dispatch("administrationManagement/updateOwnProfile", {
                 username: username.value,
                 email: email.value,
                 first_name: firstName.value,
@@ -62,9 +63,24 @@ export default defineComponent ({
                 _username: _username.value
             })
 
-            if (status) {
+            if (response) {
+                showNotification({
+                    props: {
+                        type: "success",
+                        duration: 5000,
+                        message: `The user ${username.value} seccessfully updated`
+                    }
+                })
                 updateUI(username.value)
                 resetForm()
+            } else {
+                showNotification({
+                    props: {
+                        type: "error",
+                        duration: 5000,
+                        message: `The user ${username.value} profile connot be updated at this time.`
+                    }
+                })
             }
         }
 
