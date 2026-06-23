@@ -63,7 +63,7 @@ export default defineComponent ({
                 _username: _username.value
             })
 
-            if (response) {
+            if (response && response.status && response.status === 200) {
                 showNotification({
                     props: {
                         type: "success",
@@ -73,12 +73,14 @@ export default defineComponent ({
                 })
                 updateUI(username.value)
                 resetForm()
-            } else {
+            }
+            else if (response.response.status === 406) {
                 showNotification({
                     props: {
                         type: "error",
                         duration: 5000,
-                        message: `The user ${username.value} profile connot be updated at this time.`
+                        message: `The user ${username.value} profile connot be 
+                        updated. ${response.response.data.error}`
                     }
                 })
             }
