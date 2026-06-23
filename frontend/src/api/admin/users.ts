@@ -42,8 +42,8 @@ export const resetOwnPassword = (params: any) => {
             ? Promise.resolve(response)
             : Promise.reject()
         })
-        .catch((error: AxiosError) => {
-            if (error.response?.status === 403) return error.response
+        .catch((error: any) => {
+            return error
         })
 }
 
