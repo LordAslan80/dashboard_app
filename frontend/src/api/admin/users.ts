@@ -57,10 +57,10 @@ export const updateOwnProfile = (params: Partial<IUser>) => {
                 last_name: params.last_name
             })
             .then((response: AxiosResponse) => {
-                response.status === 200 ? resolve(response.data) : reject(response.data)
+                if (response.status === 200) resolve(response)
             })
-            .catch((error) => {
-                console.log("caught error in updateOwnProfile: ", error)
+            .catch((error: AxiosError) => {
+                reject(error)
             })
     })
 }
