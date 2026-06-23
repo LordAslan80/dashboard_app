@@ -3,6 +3,7 @@ import { authorize } from "@/localStorage";
 import { ILoginData } from "@/models/ILoginData";
 import { remove as removeFromStore } from "@/localStorage";
 import router from "@/router";
+import { showNotification } from "@/composables/outlets";
 
 
 axios.defaults.headers.common["Content-Type"] = "application/json"
@@ -27,13 +28,24 @@ const api = (axios: Axios) => {
         },
         (error: AxiosError) => {
             if (error.message === "Network Error" && !error.response) {
-                console.log("Network Error: ", error)
+                showNotification({
+                    props: {
+                        type: "error",
+                        duration: 5000,
+                        message: `This operation can not be executed at this time 
+                        due to the ${error.message}. Please try again later.`
+                    }
+                })
+                return false
             }
             if (error.response!.status === 401) {
                 console.log("401 Error: ", error)
                 removeFromStore("logged")
                 alert("Your session is going to be closed now please login again!")
                 router.push({name: "dashboard"})
+            }
+            else {
+                return Promise.reject(error)
             }
         }
     )
