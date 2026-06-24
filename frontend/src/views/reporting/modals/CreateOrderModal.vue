@@ -46,7 +46,8 @@
                     </small>
                 </strong>
             </label>
-            <input type="date" v-model="requiredDate">
+            <input type="date" v-model="requiredDate" @change="validateDate">
+            <error-message v-if="!dateValid" :message="'Date must not be in the past'"/>
     
             <label>
                 <strong>
@@ -117,11 +118,14 @@ import { loadProducts } from '@/api/common/products';
 import { IOrder } from '@/models/IOrder';
 import { addNewOrder } from '@/api/reporting/orders';
 import { useStore } from 'vuex';
+import ErrorMessage from '@/components/common/ErrorMessage.vue';
+import formatDate from '@/composables/util';
 
 export default defineComponent ({
     components: {
         Modal,
-        Close_Icon
+        Close_Icon,
+        ErrorMessage
     },
 
     emits: ['close-modal'],
@@ -130,6 +134,7 @@ export default defineComponent ({
         const store = useStore()
 
         const buttonEnable = ref(false)
+        const dateValid = ref(true)
         
         const productId = ref('')
         const customerId = ref('')
@@ -145,6 +150,14 @@ export default defineComponent ({
 
         const getCustomers = async () => {
             customers.value = await loadCustomers()
+        }
+
+        const validateDate = () => {
+            let today = formatDate((new Date()))
+
+            today <= formatDate(new Date(requiredDate.value))
+            ? dateValid.value = true
+            : dateValid.value = false
         }
 
         watch(() => [customerId.value, productId.value, requiredDate.value, shippedName.value,
@@ -201,6 +214,8 @@ export default defineComponent ({
             shippedCity,
             shippedCountry,
             shippedPostalCode,
+            dateValid,
+            validateDate,
             closeModal,
             addNewRecord,
             customers,
