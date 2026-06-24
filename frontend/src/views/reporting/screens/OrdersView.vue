@@ -53,11 +53,17 @@
                 <tr>
                     <th @click="setSortingBy(ORDER_BY_ID)">
                         ID
-                        <Sorting_Icon :class="orderBy===ORDER_BY_ID ? 'active-sorting' : ''" class="sorting-icon"/>
+                        <span class="action-icon-wrapper">
+                            <Sorting_Icon :class="orderBy===ORDER_BY_ID ? 'active-sorting' : ''" class="sorting-icon"/>
+                            <span class="tooltiptext" v-if="orderBy===ORDER_BY_DATE">Sort by ID</span>
+                        </span>
                     </th>
                     <th @click="setSortingBy(ORDER_BY_DATE)">
                         Order date
-                        <Sorting_Icon :class="orderBy===ORDER_BY_DATE ? 'active-sorting' : ''" class="sorting-icon"/>
+                        <span class="action-icon-wrapper">
+                            <Sorting_Icon :class="orderBy===ORDER_BY_DATE ? 'active-sorting' : ''" class="sorting-icon"/>
+                            <span class="tooltiptext" v-if="orderBy===ORDER_BY_ID">Sort by Date</span>
+                        </span>
                     </th>
                     <th>Customer name</th>
                     <th>Product name</th>
@@ -82,12 +88,14 @@
                     <td>{{ item.shipped_city }}</td>
                     <td>{{ item.shipped_postal_code }}</td>
                     <td>{{ item.shipped_country }}</td>
-                    <td>
-                        <span @click.stop @click="openEditModal(item.id)">
-                            <Edit_Icon class="table_icon"/>
+                    <td class="table-actons">
+                        <span @click.stop @click="openEditModal(item.id)" class="action-icon-wrapper">
+                            <Edit_Icon class="action-icon"/>
+                            <span class="tooltiptext">Edit</span>
                         </span>
-                        <span @click.stop @click="openDeleteModal(item.id)">
-                            <Trash_Icon class="table_icon__left"/>
+                        <span @click.stop @click="openDeleteModal(item.id)" class="action-icon-wrapper">
+                            <Trash_Icon class="action-icon"/>
+                            <span class="tooltiptext">Delete</span>
                         </span>
                     </td>
                 </tr>
