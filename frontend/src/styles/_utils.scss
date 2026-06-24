@@ -27,3 +27,17 @@
     border-radius: 4px;
     box-shadow: 0 4px 12px 0 rgba(0, 0, 0, .1);
 }
+
+@mixin click() {
+    transition: all 0.2s linear;
+
+    &:hover {
+        background-color: $color-4;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    &:active {
+        box-shadow: 0 0 0 8px $color-4;
+    }
+}
