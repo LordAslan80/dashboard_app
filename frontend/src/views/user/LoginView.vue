@@ -22,6 +22,7 @@ import { authenticate } from '@/api/admin/users';
 import { ILoginCredentials } from '@/models/ILoginCredentials';
 import { save as saveToStore } from '@/localStorage';
 import router from '@/router';
+import { showNotification } from '@/composables/outlets';
 
 export default defineComponent ({
     components: {
@@ -45,7 +46,13 @@ export default defineComponent ({
             let response = await authenticate(body)
 
             if (response !== undefined && response.status === 401) {
-                console.warn("error logging", response)
+                showNotification({
+                    props: {
+                        type: "error",
+                        duration: 5000,
+                        message: `${response.data.detail}`
+                    }
+                })
             } else if (response !== undefined && response.status === 200) {
                 console.info("login seccessfull", response.data)
                 saveToStore("logged", {
