@@ -1,5 +1,10 @@
 <template>
     <div class="outlets" v-if="hasOutlets">
+        <section class="modals">
+            <component v-for="outlet in modals" :key="outlet.outlet_id"
+            :is="outlet.component" :id="outlet.outlet_id" v-bind="outlet.props"/>
+        </section>
+
         <section class="notifications">
             <component v-for="outlet in notifications" :key="outlet.outlet_id"
             :is="outlet.component" :id="outlet.outlet_id" v-bind="outlet.props"/>
@@ -20,9 +25,14 @@ export default defineComponent ({
             (outlet: any) => outlet.type === "notification"
         ))
 
+        const modals = computed(() => outlets.value.filter(
+            (outlet: any) => outlet.type === "modal"
+        ))
+
         return {
             hasOutlets,
-            notifications
+            notifications,
+            modals
         }
     },
 })
