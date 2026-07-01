@@ -4,6 +4,7 @@ import { ILoginData } from "@/models/ILoginData";
 import { remove as removeFromStore } from "@/localStorage";
 import router from "@/router";
 import { showNotification } from "@/composables/outlets";
+import { handleUnauthorizedResponse } from "./services/handleUnauthorizedResponse";
 
 
 axios.defaults.headers.common["Content-Type"] = "application/json"
@@ -40,9 +41,7 @@ const api = (axios: Axios) => {
             }
             if (error.response!.status === 401) {
                 console.log("401 Error: ", error)
-                removeFromStore("logged")
-                alert("Your session is going to be closed now please login again!")
-                router.push({name: "dashboard"})
+                handleUnauthorizedResponse()
             }
             else {
                 return Promise.reject(error)
