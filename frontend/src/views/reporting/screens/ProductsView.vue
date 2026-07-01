@@ -105,7 +105,7 @@
 
 
 <script lang="ts">
-import { deleteRecordInProducts, editRecordInProducts, loadProducts } from '@/api/reporting/products';
+import { deleteRecordInProducts, editRecordInProducts } from '@/api/reporting/products';
 import { computed, defineComponent, onMounted, ref, toRaw } from 'vue';
 import Edit_Icon from '@/assets/icons/Edit_Icon.vue';
 import Trash_Icon from '@/assets/icons/Trash_Icon.vue';

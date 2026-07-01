@@ -32,8 +32,6 @@
 <script lang="ts">
 import { updateUserPassword } from '@/api/admin/admin';
 import { filterNoAdminUsers } from '@/composables/util';
-import { get as getFromStore } from '@/localStorage';
-import { IUser } from '@/models/IUser';
 import { computed, defineComponent, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 

@@ -116,7 +116,7 @@
 
 <script lang="ts">
 import formatDate, { extractValues } from '@/composables/util';
-import { loadOrders, editRecordInOrders, deleteRecordInOrders } from '@/api/reporting/orders';
+import { editRecordInOrders, deleteRecordInOrders } from '@/api/reporting/orders';
 import { computed, defineComponent, onMounted, ref, toRaw } from 'vue';
 import CreateOrderModal from '../modals/CreateOrderModal.vue';
 import EditOrderModal from '../modals/EditOrderModal.vue';

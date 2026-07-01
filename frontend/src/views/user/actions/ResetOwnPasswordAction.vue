@@ -19,10 +19,10 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 import { resetOwnPassword } from '@/api/admin/users';
 import router from '@/router';
-import { get as getFromStore, remove as removeFromStore } from '@/localStorage';
+import { remove as removeFromStore } from '@/localStorage';
 import { showNotification } from '@/composables/outlets';
 
 export default defineComponent ({

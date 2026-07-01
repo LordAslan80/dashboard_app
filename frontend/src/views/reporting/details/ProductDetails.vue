@@ -60,7 +60,6 @@ import { useRoute } from 'vue-router'
 import { getProductDetails } from '@/api/reporting/products'
 
 import Back_Icon from '@/assets/icons/Back_Icon.vue'
-import formatDate from '@/composables/util'
 
 import { useStore } from 'vuex'
 

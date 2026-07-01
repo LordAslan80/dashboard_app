@@ -1,8 +1,6 @@
 import axios, {Axios, AxiosError, AxiosResponse} from "axios";
 import { authorize } from "@/localStorage";
 import { ILoginData } from "@/models/ILoginData";
-import { remove as removeFromStore } from "@/localStorage";
-import router from "@/router";
 import { showNotification } from "@/composables/outlets";
 import { handleUnauthorizedResponse } from "./services/handleUnauthorizedResponse";
 

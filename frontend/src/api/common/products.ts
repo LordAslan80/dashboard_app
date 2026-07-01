@@ -1,4 +1,3 @@
-import { IProduct } from "@/models/IProduct";
 import api from "../api";
 import { AxiosResponse, AxiosError } from "axios";
 
