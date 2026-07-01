@@ -31,3 +31,12 @@ export const showNotification = ({props, ...params}: any) => {
         ...params
     })
 }
+
+export const showModal = ({component, props, ...params}: any) => {
+    showOutlet({
+        component,
+        props,
+        type: "modal",
+        ...params
+    })
+}
