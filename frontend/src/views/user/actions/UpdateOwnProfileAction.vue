@@ -25,7 +25,13 @@
                     <input type="text" name="lastName" id="lastName" required v-model.trim="lastName">
                 </div>
 
-                <button type="submit" class="button is-primary">Save</button>
+                <button type="submit" class="button is-primary">
+                    <slot name="loader" v-if="isSubmitting">
+                        <loader :size="'small'" :color="SMALL_LOADER_COLOR"/>
+                    </slot>
+                    
+                    <slot v-else>Save</slot>
+                </button>
             </form>
         </div>
     </div>
@@ -36,8 +42,13 @@ import { defineComponent, ref } from 'vue';
 import { useStore } from 'vuex';
 import { load as loadFromStore, get as getFromStore, save as saveToStore } from '@/localStorage';
 import { showNotification } from '@/composables/outlets';
+import Loader from '@/components/common/Loader.vue';
+import { SMALL_LOADER_COLOR } from '@/constants/colors';
 
 export default defineComponent ({
+    components: {
+        Loader
+    },
     props: {
         user: {
             type: Object,
@@ -54,7 +65,11 @@ export default defineComponent ({
         const firstName = ref(props.user.first_name)
         const lastName = ref(props.user.last_name)
 
+        const isSubmitting = ref(false)
+
         const submitForm = async () => {
+            isSubmitting.value = true
+
             let response = await store.dispatch("administrationManagement/updateOwnProfile", {
                 username: username.value,
                 email: email.value,
@@ -84,6 +99,8 @@ export default defineComponent ({
                     }
                 })
             }
+
+            isSubmitting.value = false
         }
 
         const updateUI = (username: string) => {
@@ -111,6 +128,8 @@ export default defineComponent ({
             email,
             firstName,
             lastName,
+            isSubmitting,
+            SMALL_LOADER_COLOR,
             submitForm
         }
     },
